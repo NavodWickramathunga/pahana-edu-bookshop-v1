@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Login - Pahana Edu</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <h2 class="text-2xl font-bold text-center mb-6">User Login</h2>
+
+      <!-- Login Form -->
+      <div class="mb-6">
+        <input type="text" id="loginMobile" placeholder="Mobile Number"
+               class="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+        <input type="password" id="loginPassword" placeholder="Password"
+               class="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+        <button onclick="login()"
+                class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+          Login
+        </button>
+      </div>
+
+      <hr class="my-6">
+
+      <!-- Registration Form -->
+      <h3 class="text-lg font-semibold mb-3">New User? Register</h3>
+      <input type="text" id="regMobile" placeholder="Mobile Number"
+             class="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-green-500">
+      <input type="password" id="regPassword" placeholder="Password"
+             class="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-green-500">
+      <button onclick="register()"
+              class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+        Register
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      fetch("/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mobileNumber: document.getElementById("loginMobile").value,
+          password: document.getElementById("loginPassword").value
+        })
+      }).then(res => res.text()).then(alert);
+    }
+
+    function register() {
+      fetch("/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mobileNumber: document.getElementById("regMobile").value,
+          password: document.getElementById("regPassword").value,
+          role: "USER"
+        })
+      }).then(res => res.json()).then(data => {
+        alert("Registered Successfully! ID: " + data.id);
+      });
+    }
+  </script>
+</body>
+</html>
