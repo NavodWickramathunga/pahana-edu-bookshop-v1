@@ -8,10 +8,12 @@ import com.pahanaedu.billingsystem.repository.CustomerRepository;
 
 @Service
 public class CustomerService {
+
     @Autowired
     private CustomerRepository customerRepository;
 
     public Customer addCustomer(Customer customer) {
+        // Save the customer to the database
         return customerRepository.save(customer);
     }
 }
