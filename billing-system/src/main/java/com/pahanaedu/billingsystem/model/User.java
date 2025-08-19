@@ -1,9 +1,10 @@
 package com.pahanaedu.billingsystem.model;
 
 public class User {
-    private Long id;  // <-- change from String to Long
+    private Long id;
     private String username;
     private String password;
+    private String mobileNumber; // Add this field
 
     // getters and setters
     public Long getId() { return id; }
@@ -14,8 +15,11 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
     public String getMobileNumber() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMobileNumber'");
+        return mobileNumber;
+    }
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 }

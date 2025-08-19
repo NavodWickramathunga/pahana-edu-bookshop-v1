@@ -1,0 +1,25 @@
+<button onclick="editProfile()">Edit Profile</button>
+<form id="editForm" style="display:none;">
+  <input type="text" id="name" placeholder="Name">
+  <input type="text" id="email" placeholder="Email">
+  <button type="button" onclick="saveProfile()">Save</button>
+</form>
+
+<script>
+function editProfile() {
+    document.getElementById("editForm").style.display = "block";
+}
+
+function saveProfile() {
+    let customer = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value
+    };
+    fetch("/api/customers/{id}")
+   .then(res => res.json())
+   .then(data => {
+       document.getElementById("accountDetails").innerText =
+           `Name: ${data.name}, Email: ${data.email}`;
+   });
+
+</script>

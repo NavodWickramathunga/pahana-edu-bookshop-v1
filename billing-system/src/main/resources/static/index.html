@@ -395,6 +395,18 @@
         });
     });
 
+    //Exit Button 
+
+    <button onclick="logout()">Exit</button>
+<script>
+function logout() {
+    fetch("/logout", { method: "POST" }).then(() => {
+        window.location.href = "/index.html";
+    });
+}
+</script>
+
+
     // Theme switcher functionality
     const body = document.body;
     const blueThemeBtn = document.getElementById('theme-blue-btn');
@@ -420,6 +432,39 @@
     greenThemeBtn.addEventListener('click', () => {
         applyTheme('green');
     });
+
+    function checkout(cart) {
+    fetch("/api/bill", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cart)
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("Total Bill: " + data.total);
+        window.print(); // Print the bill
+    });
+}
+    // Add Item Form for Admin Dashboard
+    async function addItem(itemData) {
+        try {
+            const response = await fetch('/api/items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(itemData)
+            });
+            if (!response.ok) throw new Error('Failed to add item');
+            const data = await response.json();
+            showMessage(`Item "${data.name}" added successfully!`);
+        } catch (error) {
+            showMessage(`Error: ${error.message}`);
+        }
+    }
+
+    <a href="/help.html">Help</a>
+
+    
+    
 
 </script>
 

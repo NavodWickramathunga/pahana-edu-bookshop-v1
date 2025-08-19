@@ -1,0 +1,17 @@
+<!-- In admin_dashboard.html -->
+<form id="addItemForm">
+    <input type="text" id="itemName" placeholder="Item Name" required>
+    <input type="number" id="itemPrice" placeholder="Item Price" required>
+    <button type="submit">Add Item</button>
+</form>
+
+<script>
+document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const itemData = {
+        name: document.getElementById('itemName').value,
+        price: document.getElementById('itemPrice').value,
+    };
+    await addItem(itemData);
+});
+</script>
