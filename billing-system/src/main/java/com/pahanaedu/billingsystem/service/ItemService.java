@@ -1,12 +1,13 @@
 package com.pahanaedu.billingsystem.service;
 
-import com.pahanaedu.billingsystem.exception.ResourceNotFoundException;
-import com.pahanaedu.billingsystem.model.Item;
-import com.pahanaedu.billingsystem.repository.ItemRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.pahanaedu.billingsystem.exception.ResourceNotFoundException;
+import com.pahanaedu.billingsystem.model.Item;
+import com.pahanaedu.billingsystem.repository.ItemRepository;
 
 @Service
 public class ItemService {
@@ -33,7 +34,7 @@ public class ItemService {
 
         item.setName(itemDetails.getName());
         item.setPrice(itemDetails.getPrice());
-        item.setQuantity(itemDetails.getQuantity());
+        item.setStock(itemDetails.getStock()); // Updated to use setStock
 
         return itemRepository.save(item);
     }
