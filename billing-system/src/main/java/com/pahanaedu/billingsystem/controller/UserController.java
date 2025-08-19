@@ -13,16 +13,24 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // ------------------- REGISTER -------------------
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         return ResponseEntity.ok(userService.registerUser(user));
     }
 
+    // ------------------- LOGIN -------------------
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String mobile,
-                                   @RequestParam String password) {
-        boolean success = userService.authenticate(mobile, password);
-        if (success) return ResponseEntity.ok("Login Successful");
-        else return ResponseEntity.status(401).body("Invalid Credentials");
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        boolean success = userService.authenticate(
+                loginRequest.getMobileNumber(),
+                loginRequest.getPassword()
+        );
+
+        if (success) {
+            return ResponseEntity.ok("Login Successful");
+        } else {
+            return ResponseEntity.status(401).body("Invalid Credentials");
+        }
     }
 }

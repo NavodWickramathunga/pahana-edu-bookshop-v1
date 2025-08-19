@@ -1,37 +1,28 @@
 package com.pahanaedu.billingsystem.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder; // Import PasswordEncoder
 import org.springframework.stereotype.Service;
-
-import com.pahanaedu.billingsystem.model.User;
-import com.pahanaedu.billingsystem.repository.UserRepository;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder; // Inject PasswordEncoder
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public boolean authenticateAdmin(String mobileNumber, String rawPassword) {
-        Optional<User> userOpt = userRepository.findByMobileNumber(mobileNumber);
-        return userOpt.isPresent() &&
-                passwordEncoder.matches(rawPassword, userOpt.get().getPassword()) &&
-                "ADMIN".equalsIgnoreCase(userOpt.get().getRole());
+    public UserService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public boolean authenticateAdmin(String username, String password) {
+        // Assuming you have a method to get the stored hashed password
+        String storedHashedPassword = getStoredHashedPasswordForAdmin(username); // Implement this method
+        return passwordEncoder.matches(password, storedHashedPassword);
     }
 
-    public boolean authenticate(String mobileNumber, String rawPassword) {
-        Optional<User> userOpt = userRepository.findByMobileNumber(mobileNumber);
-        return userOpt.isPresent() && passwordEncoder.matches(rawPassword, userOpt.get().getPassword());
+    private String getStoredHashedPasswordForAdmin(String username) {
+        // Logic to retrieve the stored hashed password for the admin user
+        // This could be from a database or a properties file
+        return "$2a$10$YOUR_BCRYPT_HASH_HERE"; // Replace with actual retrieval logic
     }
 }
