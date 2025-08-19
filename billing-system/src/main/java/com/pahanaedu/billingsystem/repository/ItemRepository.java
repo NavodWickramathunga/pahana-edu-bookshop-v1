@@ -1,9 +1,9 @@
+// src/main/java/com/pahanaedu/billingsystem/repository/ItemRepository.java
 package com.pahanaedu.billingsystem.repository;
 
-import com.pahanaedu.billingsystem.model.Item;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-@Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {
+import com.pahanaedu.billingsystem.model.Item;
+
+public interface ItemRepository extends MongoRepository<Item, Long> { // Change String to Long if Item ID is Long
 }

@@ -1,12 +1,12 @@
 package com.pahanaedu.billingsystem.service;
 
+import com.pahanaedu.billingsystem.exception.ResourceNotFoundException;
 import com.pahanaedu.billingsystem.model.Item;
 import com.pahanaedu.billingsystem.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -18,24 +18,29 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public Optional<Item> getItemById(Long id) {
-        return itemRepository.findById(id);
+    public Item getItemById(Long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
     }
 
     public Item addItem(Item item) {
         return itemRepository.save(item);
     }
 
-    public Item editItem(Long id, Item updatedItem) {
-        return itemRepository.findById(id).map(item -> {
-            item.setName(updatedItem.getName());
-            item.setPrice(updatedItem.getPrice());
-            item.setQuantity(updatedItem.getQuantity());
-            return itemRepository.save(item);
-        }).orElseThrow(() -> new RuntimeException("Item not found with id " + id));
+    public Item updateItem(Long id, Item itemDetails) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
+
+        item.setName(itemDetails.getName());
+        item.setPrice(itemDetails.getPrice());
+        item.setQuantity(itemDetails.getQuantity());
+
+        return itemRepository.save(item);
     }
 
     public void deleteItem(Long id) {
-        itemRepository.deleteById(id);
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
+        itemRepository.delete(item);
     }
 }

@@ -8,30 +8,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/items")
+@RequestMapping("/items")
 public class ItemController {
 
     @Autowired
-    private ItemService service;
+    private ItemService itemService;
 
     @GetMapping
-    public List<Item> getAll() {
-        return service.findAll();
+    public List<Item> getAllItems() {
+        return itemService.getAllItems();
+    }
+
+    @GetMapping("/{id}")
+    public Item getItemById(@PathVariable Long id) {
+        return itemService.getItemById(id);
     }
 
     @PostMapping
-    public Item add(@RequestBody Item item) {
-        return service.save(item);
+    public Item addItem(@RequestBody Item item) {
+        return itemService.addItem(item);
     }
 
     @PutMapping("/{id}")
-    public Item update(@PathVariable String id, @RequestBody Item item) {
-        item.setId(id);
-        return service.save(item);
+    public Item updateItem(@PathVariable Long id, @RequestBody Item item) {
+        return itemService.updateItem(id, item);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        service.deleteById(id);
+    public String deleteItem(@PathVariable Long id) {
+        itemService.deleteItem(id);
+        return "Item deleted successfully!";
     }
 }
