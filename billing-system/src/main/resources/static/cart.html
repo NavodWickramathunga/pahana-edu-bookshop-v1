@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Pahana Edu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+    <nav class="bg-white shadow-md p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">Pahana Edu</div>
+            <div class="space-x-4">
+                <a href="index.html" class="text-gray-600 hover:text-blue-500 transition duration-200">Home</a>
+                <a href="AdminDashboard.html" class="text-gray-600 hover:text-blue-500 transition duration-200">Dashboard</a>
+                <a href="help.html" class="text-gray-600 hover:text-blue-500 transition duration-200">Help</a>
+            </div>
+        </div>
+    </nav>
+    <div class="flex-grow flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Your Cart</h2>
+            <p class="text-gray-600 mb-6 text-center text-lg">Manage your cart items below.</p>
+            <div id="cart-items" class="space-y-4">
+                <!-- Cart items will be populated here -->
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button 
+                    onclick="addItemToCart()" 
+                    class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-200" 
+                    role="button" 
+                    aria-label="Add New Item to Cart"
+                >
+                    Add Item
+                </button>
+                <button 
+                    onclick="window.location.href='checkout.html'" 
+                    class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-200" 
+                    role="button" 
+                    aria-label="Proceed to Checkout"
+                >
+                    Proceed to Payment
+                </button>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-white shadow-md p-4 mt-auto">
+        <div class="max-w-7xl mx-auto text-center text-gray-600">
+            &copy; 2025 Pahana Edu. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        const userId = 1; // Replace with actual user ID
+
+        async function loadCart() {
+            try {
+                const response = await fetch(`/api/cart/${userId}`);
+                const cart = await response.json();
+                const cartItemsDiv = document.getElementById('cart-items');
+                cartItemsDiv.innerHTML = '';
+                cart.items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
+                    itemDiv.innerHTML = `
+                        <div>
+                            <p class="text-gray-700">${item.name}</p>
+                            <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
+                        </div>
+                        <button 
+                            onclick="removeItemFromCart(${item.itemId})" 
+                            class="bg-red-500 text-white py-1 px-2 rounded-lg shadow hover:bg-red-600 transition duration-200" 
+                            role="button" 
+                            aria-label="Remove ${item.name} from Cart"
+                        >
+                            Remove
+                        </button>
+                    `;
+                    cartItemsDiv.appendChild(itemDiv);
+                });
+            } catch (error) {
+                console.error('Error loading cart:', error);
+                alert('Failed to load cart.');
+            }
+        }
+
+        async function addItemToCart() {
+            // Example item (replace with form/modal for real use)
+            const newItem = {
+                itemId: Date.now(), // Temporary ID
+                name: "Sample Book",
+                price: 1000.00,
+                quantity: 1
+            };
+            try {
+                const response = await fetch(`/api/cart/${userId}/items`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newItem)
+                });
+                if (response.ok) {
+                    loadCart();
+                } else {
+                    alert('Failed to add item.');
+                }
+            } catch (error) {
+                console.error('Error adding item:', error);
+                alert('An error occurred.');
+            }
+        }
+
+        async function removeItemFromCart(itemId) {
+            try {
+                const response = await fetch(`/api/cart/${userId}/items/${itemId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    loadCart();
+                } else {
+                    alert('Failed to remove item.');
+                }
+            } catch (error) {
+                console.error('Error removing item:', error);
+                alert('An error occurred.');
+            }
+        }
+
+        // Load cart on page load
+        window.onload = loadCart;
+    </script>
+</body>
+</html>

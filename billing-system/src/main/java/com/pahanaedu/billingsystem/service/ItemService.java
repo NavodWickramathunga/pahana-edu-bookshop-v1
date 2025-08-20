@@ -19,7 +19,7 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public Item getItemById(Long id) {
+    public Item getItemById(String id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
     }
@@ -28,7 +28,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public Item updateItem(Long id, Item itemDetails) {
+    public Item updateItem(String id, Item itemDetails) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
         item.setName(itemDetails.getName());
@@ -36,7 +36,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public void deleteItem(Long id) {
+    public void deleteItem(String id) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
         itemRepository.delete(item);

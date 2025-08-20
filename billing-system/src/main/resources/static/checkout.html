@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Pahana Edu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+    <nav class="bg-white shadow-md p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">Pahana Edu</div>
+            <div class="space-x-4">
+                <a href="index.html" class="text-gray-600 hover:text-blue-500 transition duration-200">Home</a>
+                <a href="AdminDashboard.html" class="text-gray-600 hover:text-blue-500 transition duration-200">Dashboard</a>
+                <a href="help.html" class="text-gray-600 hover:text-blue-500 transition duration-200">Help</a>
+            </div>
+        </div>
+    </nav>
+    <div class="flex-grow flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Checkout</h2>
+            <p class="text-gray-600 mb-6 text-center text-lg">Complete your payment below.</p>
+            <div id="cart-items" class="space-y-4 mb-6"></div>
+            <div class="space-y-4">
+                <div>
+                    <label for="cardNumber" class="block text-gray-700 font-semibold">Card Number</label>
+                    <input 
+                        id="cardNumber" 
+                        type="text" 
+                        class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="1234 5678 9012 3456"
+                    >
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="expiry" class="block text-gray-700 font-semibold">Expiry Date</label>
+                        <input 
+                            id="expiry" 
+                            type="text" 
+                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            placeholder="MM/YY"
+                        >
+                    </div>
+                    <div class="w-1/2">
+                        <label for="cvv" class="block text-gray-700 font-semibold">CVV</label>
+                        <input 
+                            id="cvv" 
+                            type="text" 
+                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            placeholder="123"
+                        >
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button 
+                        onclick="completePayment()" 
+                        class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-200" 
+                        role="button" 
+                        aria-label="Complete Payment"
+                    >
+                        Complete Payment
+                    </button>
+                </div>
+            </div>
+            <div id="bill-options" class="hidden mt-6 space-y-4">
+                <p class="text-gray-600 text-center">Payment successful! Choose how to receive your bill:</p>
+                <div class="flex justify-center space-x-4">
+                    <button 
+                        onclick="sendBillEmail()" 
+                        class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-200" 
+                        role="button" 
+                        aria-label="Send Bill to Email"
+                    >
+                        Send to Email
+                    </button>
+                    <button 
+                        onclick="downloadBill()" 
+                        class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-200" 
+                        role="button" 
+                        aria-label="Download Bill"
+                    >
+                        Download Bill
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-white shadow-md p-4 mt-auto">
+        <div class="max-w-7xl mx-auto text-center text-gray-600">
+            &copy; 2025 Pahana Edu. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        const userId = 1; // Replace with actual user ID from session
+        let billId = null;
+
+        async function loadCartItems() {
+            try {
+                const response = await fetch(`/api/cart/${userId}`);
+                const cart = await response.json();
+                const cartItemsDiv = document.getElementById('cart-items');
+                cartItemsDiv.innerHTML = '';
+                cart.items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
+                    itemDiv.innerHTML = `
+                        <div>
+                            <p class="text-gray-700">${item.name}</p>
+                            <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
+                        </div>
+                    `;
+                    cartItemsDiv.appendChild(itemDiv);
+                });
+                const total = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+                const totalDiv = document.createElement('div');
+                totalDiv.className = 'text-right text-gray-800 font-semibold';
+                totalDiv.textContent = `Total: $${total.toFixed(2)}`;
+                cartItemsDiv.appendChild(totalDiv);
+            } catch (error) {
+                console.error('Error loading cart:', error);
+                alert('Failed to load cart.');
+            }
+        }
+
+        async function completePayment() {
+            // Simulate payment validation
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+            if (!cardNumber || !expiry || !cvv) {
+                alert('Please fill in all payment details.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/bills/generate/${userId}`, {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    const bill = await response.json();
+                    billId = bill.id;
+                    document.getElementById('bill-options').classList.remove('hidden');
+                    document.querySelector('button[aria-label="Complete Payment"]').disabled = true;
+                    alert('Payment completed successfully!');
+                } else {
+                    alert('Failed to generate bill.');
+                }
+            } catch (error) {
+                console.error('Error completing payment:', error);
+                alert('An error occurred.');
+            }
+        }
+
+        async function sendBillEmail() {
+            try {
+                const response = await fetch(`/api/bills/email/${billId}`, {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    alert('Bill sent to your email!');
+                } else {
+                    alert('Failed to send bill.');
+                }
+            } catch (error) {
+                console.error('Error sending bill email:', error);
+                alert('An error occurred.');
+            }
+        }
+
+        async function downloadBill() {
+            try {
+                const response = await fetch(`/api/bills/download/${billId}`);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `bill_${billId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error downloading bill:', error);
+                alert('An error occurred.');
+            }
+        }
+
+        window.onload = loadCartItems;
+    </script>
+</body>
+</html>

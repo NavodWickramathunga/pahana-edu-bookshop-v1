@@ -27,11 +27,13 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/**", "/logout").authenticated()
-                .requestMatchers("/admin-login.html", "/login").permitAll()
+                .requestMatchers("/AdminLogin.html", "/login").permitAll()
+                .requestMatchers("/api/users/**", "/api/cart/**").authenticated()
+                .requestMatchers("/api/users/**", "/api/cart/**", "/api/bills/**").authenticated()
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
-                .loginPage("/admin-login.html")
+                .loginPage("/AdminLogin.html")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/AdminDashboard.html")
                 .permitAll()
