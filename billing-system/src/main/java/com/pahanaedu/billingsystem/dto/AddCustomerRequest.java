@@ -1,33 +1,23 @@
 package com.pahanaedu.billingsystem.dto;
 
-import com.pahanaedu.billingsystem.model.User;
+import com.pahanaedu.billingsystem.model.Customer;
 
 public class AddCustomerRequest {
-    private User customer;
-    private String mobile;
-    private String password;
+    private Customer customer;
 
-    public User getCustomer() {
-        return customer;
-    }
+    // Default constructor
+    public AddCustomerRequest() {}
 
-    public void setCustomer(User customer) {
+    // Constructor with customer
+    public AddCustomerRequest(Customer customer) {
         this.customer = customer;
     }
 
-    public String getMobile() {
-        return mobile;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

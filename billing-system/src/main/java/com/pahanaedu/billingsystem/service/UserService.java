@@ -1,28 +1,38 @@
 package com.pahanaedu.billingsystem.service;
 
-import com.pahanaedu.billingsystem.model.User;
-import org.springframework.security.crypto.password.PasswordEncoder; // Import PasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.pahanaedu.billingsystem.model.User;
+import com.pahanaedu.billingsystem.repository.UserRepository;
 
 @Service
 public class UserService {
 
-    private final PasswordEncoder passwordEncoder; // Inject PasswordEncoder
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    public UserService(PasswordEncoder passwordEncoder) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     public boolean authenticateAdmin(String username, String password) {
         // Assuming you have a method to get the stored hashed password
-        String storedHashedPassword = getStoredHashedPasswordForAdmin(username); // Implement this method
-        return passwordEncoder.matches(password, storedHashedPassword);
+        String storedHashedPassword = getStoredHashedPasswordForAdmin(username);
+        if (storedHashedPassword != null) {
+            return passwordEncoder.matches(password, storedHashedPassword);
+        }
+        return false; // Return false if user not found
     }
 
     private String getStoredHashedPasswordForAdmin(String username) {
         // Logic to retrieve the stored hashed password for the admin user
-        // This could be from a database or a properties file
-        return "$2a$10$YOUR_BCRYPT_HASH_HERE"; // Replace with actual retrieval logic
+        User adminUser = userRepository.findByUsername(username);
+        if (adminUser != null) {
+            return adminUser.getPassword();
+        }
+        return null; // Return null if user not found
     }
 
     // Add these methods:
@@ -32,18 +42,24 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         // Save the user to the database
-        return user; // Return the saved user
+        return userRepository.save(user);
     }
 
     public boolean authenticate(String mobileNumber, String password) {
         // Logic to authenticate a user using mobile number and password
-        String storedHashedPassword = getStoredHashedPasswordForUser(mobileNumber); // Implement this method
-        return passwordEncoder.matches(password, storedHashedPassword);
+        String storedHashedPassword = getStoredHashedPasswordForUser(mobileNumber);
+        if (storedHashedPassword != null) {
+            return passwordEncoder.matches(password, storedHashedPassword);
+        }
+        return false; // Return false if user not found
     }
 
     private String getStoredHashedPasswordForUser(String mobileNumber) {
         // Logic to retrieve the stored hashed password for the user
-        // This could be from a database or a properties file
-        return "$2a$10$YOUR_BCRYPT_HASH_HERE"; // Replace with actual retrieval logic
+        User user = userRepository.findByMobileNumber(mobileNumber);
+        if (user != null) {
+            return user.getPassword();
+        }
+        return null; // Return null if user not found
     }
 }
