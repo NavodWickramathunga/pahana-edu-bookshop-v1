@@ -30,8 +30,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-
-
         <!-- Spring Boot Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,8 +61,6 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
-
 
         <!-- Testing -->
         <dependency>
