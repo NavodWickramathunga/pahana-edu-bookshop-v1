@@ -78,6 +78,8 @@
                 <a href="user-login.html" class="text-gray-600 hover:text-primary transition-colors">User Login</a>
                 <a href="admin-login.html" class="text-gray-600 hover:text-primary transition-colors">Admin Login</a>
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors">My Account</a>
+                <a href="/help.html" class="text-gray-600 hover:text-primary transition-colors">Help</a>
+                <button onclick="logout()" class="text-gray-600 hover:text-primary transition-colors">Exit</button>
             </div>
         </div>
     </header>
@@ -125,7 +127,6 @@
             <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500"></button>
         </div>
     </div>
-
 
     <!-- Main Content Area -->
     <main class="container mx-auto px-4 py-8">
@@ -323,7 +324,6 @@
             <button id="close-modal-btn" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Close</button>
         </div>
     </div>
-
 </div>
 
 <script>
@@ -395,56 +395,34 @@
         });
     });
 
-    //Exit Button 
-
-    <button onclick="logout()">Exit</button>
-<script>
-function logout() {
-    fetch("/logout", { method: "POST" }).then(() => {
-        window.location.href = "/index.html";
-    });
-}
-</script>
-
-
-    // Theme switcher functionality
-    const body = document.body;
-    const blueThemeBtn = document.getElementById('theme-blue-btn');
-    const greenThemeBtn = document.getElementById('theme-green-btn');
-
-    // Function to apply a theme
-    function applyTheme(theme) {
-        body.classList.remove('theme-blue', 'theme-green');
-        if (theme === 'green') {
-            body.classList.add('theme-green');
-        }
-        localStorage.setItem('theme', theme);
+    // Logout function
+    function logout() {
+        fetch("/logout", { method: "POST" })
+            .then(() => {
+                window.location.href = "/index.html";
+            })
+            .catch(error => {
+                showMessage(`Error logging out: ${error.message}`);
+            });
     }
 
-    // Set initial theme on page load
-    const savedTheme = localStorage.getItem('theme') || 'blue';
-    applyTheme(savedTheme);
-
-    blueThemeBtn.addEventListener('click', () => {
-        applyTheme('blue');
-    });
-
-    greenThemeBtn.addEventListener('click', () => {
-        applyTheme('green');
-    });
-
+    // Checkout function
     function checkout(cart) {
-    fetch("/api/bill", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cart)
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert("Total Bill: " + data.total);
-        window.print(); // Print the bill
-    });
-}
+        fetch("/api/bill", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(cart)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert("Total Bill: " + data.total);
+            window.print(); // Print the bill
+        })
+        .catch(error => {
+            showMessage(`Error during checkout: ${error.message}`);
+        });
+    }
+
     // Add Item Form for Admin Dashboard
     async function addItem(itemData) {
         try {
@@ -460,12 +438,6 @@ function logout() {
             showMessage(`Error: ${error.message}`);
         }
     }
-
-    <a href="/help.html">Help</a>
-
-    
-    
-
 </script>
 
 </body>
