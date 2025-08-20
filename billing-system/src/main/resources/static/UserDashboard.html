@@ -1,25 +1,107 @@
-<button onclick="editProfile()">Edit Profile</button>
-<form id="editForm" style="display:none;">
-  <input type="text" id="name" placeholder="Name">
-  <input type="text" id="email" placeholder="Email">
-  <button type="button" onclick="saveProfile()">Save</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard - Pahana Edu</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h2 class="text-3xl font-extrabold text-center mb-6 text-gray-800">Your Account</h2>
 
-<script>
-function editProfile() {
-    document.getElementById("editForm").style.display = "block";
-}
+    <div class="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <h3 class="text-xl font-semibold mb-3 text-gray-700">Account Details</h3>
+        <p id="accountDetails" class="text-gray-600">Loading account details...</p>
+    </div>
 
-function saveProfile() {
-    let customer = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value
-    };
-    fetch("/api/customers/{id}")
-   .then(res => res.json())
-   .then(data => {
-       document.getElementById("accountDetails").innerText =
-           `Name: ${data.name}, Email: ${data.email}`;
-   });
+    <button onclick="editProfile()"
+            class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mb-6">
+      Edit Profile
+    </button>
 
-</script>
+    <form id="editForm" style="display:none;" class="p-6 border border-gray-200 rounded-lg bg-gray-50 space-y-4">
+      <h3 class="text-xl font-semibold text-center mb-4 text-gray-700">Edit Profile</h3>
+      <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+          <input type="text" id="name" placeholder="Your Name"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200">
+      </div>
+      <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input type="text" id="email" placeholder="Your Email"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200">
+      </div>
+      <button type="button" onclick="saveProfile()"
+              class="w-full bg-purple-600 text-white py-2.5 rounded-lg hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+        Save Changes
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Simulate fetching initial customer data
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchCustomerDetails();
+    });
+
+    function fetchCustomerDetails() {
+        // In a real app, you'd get the ID from session/local storage or URL
+        // For demonstration, let's use a placeholder ID and mock data
+        const customerId = '123'; // Replace with actual customer ID
+        fetch(`/api/customers/${customerId}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                document.getElementById("accountDetails").innerText =
+                    `Name: ${data.name || 'N/A'}, Email: ${data.email || 'N/A'}`;
+                // Pre-fill edit form if data exists
+                document.getElementById("name").value = data.name || '';
+                document.getElementById("email").value = data.email || '';
+            })
+            .catch(error => {
+                console.error("Error fetching customer details:", error);
+                document.getElementById("accountDetails").innerText = "Failed to load account details.";
+            });
+    }
+
+    function editProfile() {
+        const editForm = document.getElementById("editForm");
+        editForm.style.display = editForm.style.display === "none" ? "block" : "none";
+    }
+
+    function saveProfile() {
+        let customer = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value
+        };
+        const customerId = '123'; // Replace with actual customer ID
+
+        fetch(`/api/customers/${customerId}`, {
+            method: "PUT", // Or PATCH, depending on your API
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(customer)
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            alert("Profile updated successfully!");
+            document.getElementById("accountDetails").innerText =
+                `Name: ${data.name}, Email: ${data.email}`;
+            document.getElementById("editForm").style.display = "none"; // Hide form after saving
+        })
+        .catch(error => {
+            console.error("Error saving profile:", error);
+            alert("Failed to save profile: " + error.message);
+        });
+    }
+  </script>
+</body>
+</html>

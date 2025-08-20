@@ -1,8 +1,45 @@
-<h2>Help Section</h2>
-<p>How to use the system:</p>
-<ul>
-  <li>Login/Register</li>
-  <li>Edit your profile</li>
-  <li>Browse items and add to cart</li>
-  <li>Checkout and pay</li>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Section - Pahana Edu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+        <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Help Section</h2>
+        <p class="text-gray-600 mb-6 text-center">How to use the system:</p>
+        <ul class="list-disc list-inside space-y-2">
+            <li class="bg-gray-50 p-4 rounded-lg shadow hover:bg-gray-100 transition duration-200">Login/Register</li>
+            <li class="bg-gray-50 p-4 rounded-lg shadow hover:bg-gray-100 transition duration-200">Edit your profile</li>
+            <li class="bg-gray-50 p-4 rounded-lg shadow hover:bg-gray-100 transition duration-200">Browse items and add to cart</li>
+            <li class="bg-gray-50 p-4 rounded-lg shadow hover:bg-gray-100 transition duration-200">Checkout and pay</li>
+        </ul>
+    </div>
+</body>
+</html>
+            })
+            .catch(error => {
+                console.error("Error fetching customer details:", error);
+                document.getElementById("accountDetails").innerText = "Failed to load account details.";
+            });
+    }
+
+    function editProfile() {
+        document.getElementById("editForm").style.display = "block";
+    }
+
+    function saveProfile() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        // Simulate saving profile data
+        console.log("Saving profile:", { name, email });
+        alert("Profile updated successfully!");
+
+        // Hide the edit form after saving
+        document.getElementById("editForm").style.display = "none";
+        fetchCustomerDetails(); // Refresh account details
+    }
+  </script> 
