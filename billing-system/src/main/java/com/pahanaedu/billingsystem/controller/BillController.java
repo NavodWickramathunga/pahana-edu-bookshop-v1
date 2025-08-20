@@ -1,26 +1,24 @@
 package com.pahanaedu.billingsystem.controller;
 
 import com.pahanaedu.billingsystem.model.Item;
+import com.pahanaedu.billingsystem.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/bill")
+@RequestMapping("/api/bills")
 public class BillController {
 
-      @PostMapping
-   public ResponseEntity<Map<String, Object>> calculateBill(@RequestBody List<Item> items) {
-       double total = items.stream().mapToDouble(i -> i.getPrice() * i.getStock()).sum();
+    @Autowired
+    private ItemService itemService;
 
-       Map<String, Object> response = new HashMap<>();
-       response.put("items", items);
-       response.put("total", total);
-
-       return ResponseEntity.ok(response);
-   }
-   
+    @GetMapping("/items")
+    public ResponseEntity<List<Item>> getItemsInStock() {
+        List<Item> items = itemService.getAllItems();
+        items.removeIf(item -> item.getStock() == null || item.getStock() <= 0);
+        return ResponseEntity.ok(items);
+    }
 }

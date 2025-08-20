@@ -31,11 +31,8 @@ public class ItemService {
     public Item updateItem(Long id, Item itemDetails) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
-
         item.setName(itemDetails.getName());
         item.setPrice(itemDetails.getPrice());
-        item.setStock(itemDetails.getStock()); // Updated to use setStock
-
         return itemRepository.save(item);
     }
 
