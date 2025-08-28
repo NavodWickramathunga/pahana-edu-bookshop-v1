@@ -76,7 +76,7 @@
         <header class="bg-header shadow-sm transition-colors">
             <div class="container mx-auto px-4 py-4 flex justify-between items-center">
                 <div class="flex items-center space-x-4">
-                    <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none">
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none" aria-label="Toggle navigation menu">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                         </svg>
@@ -85,8 +85,8 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-gray-600 text-sm">Themes:</span>
-                    <button id="theme-blue-btn" class="w-8 h-8 rounded-full bg-primary transition-colors border-2 border-transparent focus:border-gray-500"></button>
-                    <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500"></button>
+                    <button id="theme-blue-btn" class="w-8 h-8 rounded-full bg-primary transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to blue theme"></button>
+                    <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to green theme"></button>
                 </div>
             </div>
         </header>
@@ -173,7 +173,7 @@
     const greenThemeBtn = document.getElementById('theme-green-btn');
 
     function applyTheme(theme) {
-        body.classList.remove('theme-blue', 'theme-green');
+        body.classList.remove('theme-green');
         if (theme === 'green') body.classList.add('theme-green');
         localStorage.setItem('theme', theme);
     }
@@ -203,20 +203,30 @@
 
     // Section toggling
     const sections = document.querySelectorAll('.content-section');
-    const navButtons = document.querySelectorAll('#sidebar button:not([onclick="logout()"])');
+    const navButtons = document.querySelectorAll('#sidebar button[id$="-btn"]');
 
     function showSection(sectionId) {
+        // Hide all sections
         sections.forEach(section => section.classList.remove('active'));
+        // Show the selected section
         document.getElementById(sectionId).classList.add('active');
+        
+        // Remove active styling from all buttons
         navButtons.forEach(btn => btn.classList.remove('bg-primary-light'));
+        // Add active styling to the clicked button
         document.getElementById(`${sectionId}-btn`).classList.add('bg-primary-light');
+        
+        // Fetch data based on section
         if (sectionId === 'view-orders') fetchOrders();
         if (sectionId === 'user-management') fetchUsers();
         if (sectionId === 'manage-items') fetchItems();
     }
 
     navButtons.forEach(button => {
-        button.addEventListener('click', () => showSection(button.id.replace('-btn', '')));
+        button.addEventListener('click', () => {
+            const sectionId = button.id.replace('-btn', '');
+            showSection(sectionId);
+        });
     });
 
     // Logout function
@@ -232,7 +242,7 @@
             const response = await fetch('http://localhost:8080/api/items', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
+                credentials: 'include' // Crucial for sending session cookie
             });
             if (!response.ok) throw new Error('Failed to fetch items');
             const items = await response.json();
@@ -254,6 +264,8 @@
         }
     }
 
+
+
     // Add Item
     const addItemForm = document.getElementById('addItemForm');
     async function addItem(itemData) {
@@ -273,15 +285,15 @@
         }
     }
 
-    addItemForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const itemData = {
-            name: document.getElementById('itemName').value,
-            price: parseFloat(document.getElementById('itemPrice').value),
-        };
-        await addItem(itemData);
-        addItemForm.reset();
-    });
+addItemForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    const itemData = {
+        name: document.getElementById('itemName').value,
+        price: parseFloat(document.getElementById('itemPrice').value),
+    };
+    await addItem(itemData);
+    addItemForm.reset(); // Clear form fields
+});
 
     // Delete Item
     async function deleteItem(itemId) {
@@ -295,83 +307,80 @@
             if (!response.ok) throw new Error('Failed to delete item');
             showMessage('Item deleted successfully!');
             fetchItems();
-        } catch (error) {
-            showMessage(`Error: ${error.message}`);
-        }
-    }
 
     // Fetch and display orders
     async function fetchOrders() {
-        try {
-            const response = await fetch('http://localhost:8080/api/orders', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            if (!response.ok) throw new Error('Failed to fetch orders');
-            const orders = await response.json();
-            const ordersTableBody = document.getElementById('ordersTableBody');
-            ordersTableBody.innerHTML = '';
-            orders.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.customerName}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(order.total).toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(order.date).toLocaleDateString()}</td>
-                `;
-                ordersTableBody.appendChild(row);
-            });
-        } catch (error) {
-            showMessage(`Error: ${error.message}`);
-        }
+    try {
+        const response = await fetch('http://localhost:8080/api/orders', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Failed to fetch orders');
+        const orders = await response.json();
+        const ordersTableBody = document.getElementById('ordersTableBody');
+        ordersTableBody.innerHTML = '';
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.id}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.customerName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(order.total).toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(order.date).toLocaleDateString()}</td>
+            `;
+            ordersTableBody.appendChild(row);
+        });
+    } catch (error) {
+        showMessage(`Error: ${error.message}`);
     }
+}
+
 
     // Fetch and display users
     async function fetchUsers() {
-        try {
-            const response = await fetch('http://localhost:8080/api/users', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            if (!response.ok) throw new Error('Failed to fetch users');
-            const users = await response.json();
-            const usersTableBody = document.getElementById('usersTableBody');
-            usersTableBody.innerHTML = '';
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.username}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.email}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="deleteUser(${user.id})" class="text-red-600 hover:text-red-800">Delete</button>
-                    </td>
-                `;
-                usersTableBody.appendChild(row);
-            });
-        } catch (error) {
-            showMessage(`Error: ${error.message}`);
-        }
+    try {
+        const response = await fetch('http://localhost:8080/api/users', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Failed to fetch users');
+        const users = await response.json();
+        const usersTableBody = document.getElementById('usersTableBody');
+        usersTableBody.innerHTML = '';
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.id}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.username}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.email}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <button onclick="deleteUser(${user.id})" class="text-red-600 hover:text-red-800">Delete</button>
+                </td>
+            `;
+            usersTableBody.appendChild(row);
+        });
+    } catch (error) {
+        showMessage(`Error: ${error.message}`);
     }
+}
 
     // Delete user
     async function deleteUser(userId) {
-        if (!confirm('Are you sure you want to delete this user?')) return;
-        try {
-            const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            if (!response.ok) throw new Error('Failed to delete user');
-            showMessage('User deleted successfully!');
-            fetchUsers();
-        } catch (error) {
-            showMessage(`Error: ${error.message}`);
-        }
+    if (!confirm('Are you sure you want to delete this user?')) return;
+    try {
+        const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Failed to delete user');
+        showMessage('User deleted successfully!');
+        fetchUsers();
+    } catch (error) {
+        showMessage(`Error: ${error.message}`);
     }
+}
 
     // Initialize with Manage Items section
     document.addEventListener('DOMContentLoaded', () => {

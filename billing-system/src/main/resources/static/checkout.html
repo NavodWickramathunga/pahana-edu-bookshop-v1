@@ -93,98 +93,108 @@
     </footer>
     <script>
         const userId = 1; // Replace with actual user ID from session
-        let billId = null;
+        let billId = null; // Declare billId globally or in a higher scope
 
         async function loadCartItems() {
-            try {
-                const response = await fetch(`/api/cart/${userId}`);
-                const cart = await response.json();
-                const cartItemsDiv = document.getElementById('cart-items');
-                cartItemsDiv.innerHTML = '';
-                cart.items.forEach(item => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
-                    itemDiv.innerHTML = `
-                        <div>
-                            <p class="text-gray-700">${item.name}</p>
-                            <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
-                        </div>
-                    `;
-                    cartItemsDiv.appendChild(itemDiv);
-                });
-                const total = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-                const totalDiv = document.createElement('div');
-                totalDiv.className = 'text-right text-gray-800 font-semibold';
-                totalDiv.textContent = `Total: $${total.toFixed(2)}`;
-                cartItemsDiv.appendChild(totalDiv);
-            } catch (error) {
-                console.error('Error loading cart:', error);
-                alert('Failed to load cart.');
-            }
-        }
+    try {
+        const response = await fetch(`/api/cart/${userId}`);
+        const cart = await response.json();
+        const cartItemsDiv = document.getElementById('cart-items');
+        cartItemsDiv.innerHTML = '';
+        cart.items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
+            itemDiv.innerHTML = `
+                <div>
+                    <p class="text-gray-700">${item.name}</p>
+                    <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
+                </div>
+            `;
+            cartItemsDiv.appendChild(itemDiv);
+        });
+        const total = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const totalDiv = document.createElement('div');
+        totalDiv.className = 'text-right text-gray-800 font-semibold';
+        totalDiv.textContent = `Total: $${total.toFixed(2)}`;
+        cartItemsDiv.appendChild(totalDiv);
+    } catch (error) {
+        console.error('Error loading cart:', error);
+        alert('Failed to load cart.');
+    }
+}
+window.onload = loadCartItems; // For checkout.html
 
-        async function completePayment() {
-            // Simulate payment validation
-            const cardNumber = document.getElementById('cardNumber').value;
-            const expiry = document.getElementById('expiry').value;
-            const cvv = document.getElementById('cvv').value;
-            if (!cardNumber || !expiry || !cvv) {
-                alert('Please fill in all payment details.');
-                return;
-            }
+async function completePayment() {
+    // Simulate payment validation (replace with actual validation)
+    const cardNumber = document.getElementById('cardNumber').value;
+    const expiry = document.getElementById('expiry').value;
+    const cvv = document.getElementById('cvv').value;
+    if (!cardNumber || !expiry || !cvv) {
+        alert('Please fill in all payment details.');
+        return;
+    }
 
-            try {
-                const response = await fetch(`/api/bills/generate/${userId}`, {
-                    method: 'POST'
-                });
-                if (response.ok) {
-                    const bill = await response.json();
-                    billId = bill.id;
-                    document.getElementById('bill-options').classList.remove('hidden');
-                    document.querySelector('button[aria-label="Complete Payment"]').disabled = true;
-                    alert('Payment completed successfully!');
-                } else {
-                    alert('Failed to generate bill.');
-                }
-            } catch (error) {
-                console.error('Error completing payment:', error);
-                alert('An error occurred.');
-            }
+    try {
+        const response = await fetch(`/api/bills/generate/${userId}`, {
+            method: 'POST'
+        });
+        if (response.ok) {
+            const bill = await response.json();
+            billId = bill.id; // Store the bill ID
+            document.getElementById('bill-options').classList.remove('hidden');
+            document.querySelector('button[aria-label="Complete Payment"]').disabled = true;
+            alert('Payment completed successfully!');
+        } else {
+            alert('Failed to generate bill.');
         }
+    } catch (error) {
+        console.error('Error completing payment:', error);
+        alert('An error occurred.');
+    }
+}
+
 
         async function sendBillEmail() {
-            try {
-                const response = await fetch(`/api/bills/email/${billId}`, {
-                    method: 'POST'
-                });
-                if (response.ok) {
-                    alert('Bill sent to your email!');
-                } else {
-                    alert('Failed to send bill.');
-                }
-            } catch (error) {
-                console.error('Error sending bill email:', error);
-                alert('An error occurred.');
-            }
+    if (!billId) { // Ensure billId is set from completePayment()
+        alert('Please complete payment first.');
+        return;
+    }
+    try {
+        const response = await fetch(`/api/bills/email/${billId}`, {
+            method: 'POST'
+        });
+        if (response.ok) {
+            alert('Bill sent to your email!');
+        } else {
+            alert('Failed to send bill.');
         }
+    } catch (error) {
+        console.error('Error sending bill email:', error);
+        alert('An error occurred.');
+    }
+}
 
         async function downloadBill() {
-            try {
-                const response = await fetch(`/api/bills/download/${billId}`);
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `bill_${billId}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            } catch (error) {
-                console.error('Error downloading bill:', error);
-                alert('An error occurred.');
-            }
-        }
+    if (!billId) { // Ensure billId is set from completePayment()
+        alert('Please complete payment first.');
+        return;
+    }
+    try {
+        const response = await fetch(`/api/bills/download/${billId}`);
+        const blob = await response.blob(); // Get the file as a Blob
+        const url = window.URL.createObjectURL(blob); // Create a temporary URL for the Blob
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bill_${billId}.pdf`; // Set the filename
+        document.body.appendChild(a);
+        a.click(); // Programmatically click the link to trigger download
+        document.body.removeChild(a); // Clean up
+        window.URL.revokeObjectURL(url); // Release the temporary URL
+    } catch (error) {
+        console.error('Error downloading bill:', error);
+        alert('An error occurred.');
+    }
+}
 
         window.onload = loadCartItems;
     </script>

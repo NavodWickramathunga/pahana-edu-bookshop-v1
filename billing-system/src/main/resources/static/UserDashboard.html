@@ -41,50 +41,12 @@
   <script>
     // Simulate fetching initial customer data
     document.addEventListener('DOMContentLoaded', () => {
-        fetchCustomerDetails();
-    });
+    fetchCustomerDetails();
+});
 
-    function fetchCustomerDetails() {
-        // In a real app, you'd get the ID from session/local storage or URL
-        // For demonstration, let's use a placeholder ID and mock data
-        const customerId = '123'; // Replace with actual customer ID
-        fetch(`/api/customers/${customerId}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                document.getElementById("accountDetails").innerText =
-                    `Name: ${data.name || 'N/A'}, Email: ${data.email || 'N/A'}`;
-                // Pre-fill edit form if data exists
-                document.getElementById("name").value = data.name || '';
-                document.getElementById("email").value = data.email || '';
-            })
-            .catch(error => {
-                console.error("Error fetching customer details:", error);
-                document.getElementById("accountDetails").innerText = "Failed to load account details.";
-            });
-    }
-
-    function editProfile() {
-        const editForm = document.getElementById("editForm");
-        editForm.style.display = editForm.style.display === "none" ? "block" : "none";
-    }
-
-    function saveProfile() {
-        let customer = {
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value
-        };
-        const customerId = '123'; // Replace with actual customer ID
-
-        fetch(`/api/customers/${customerId}`, {
-            method: "PUT", // Or PATCH, depending on your API
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(customer)
-        })
+function fetchCustomerDetails() {
+    const customerId = '123'; // IMPORTANT: Replace with actual user ID from session
+    fetch(`/api/customers/${customerId}`)
         .then(res => {
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
@@ -92,16 +54,52 @@
             return res.json();
         })
         .then(data => {
-            alert("Profile updated successfully!");
             document.getElementById("accountDetails").innerText =
-                `Name: ${data.name}, Email: ${data.email}`;
-            document.getElementById("editForm").style.display = "none"; // Hide form after saving
+                `Name: ${data.name || 'N/A'}, Email: ${data.email || 'N/A'}`;
+            document.getElementById("name").value = data.name || '';
+            document.getElementById("email").value = data.email || '';
         })
         .catch(error => {
-            console.error("Error saving profile:", error);
-            alert("Failed to save profile: " + error.message);
+            console.error("Error fetching customer details:", error);
+            document.getElementById("accountDetails").innerText = "Failed to load account details.";
         });
+}
+
+
+    function editProfile() {
+        const editForm = document.getElementById("editForm");
+        editForm.style.display = editForm.style.display === "none" ? "block" : "none";
     }
+
+    function saveProfile() {
+    let customer = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value
+    };
+    const customerId = '123'; // IMPORTANT: Replace with actual user ID from session
+
+    fetch(`/api/customers/${customerId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customer)
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+    })
+    .then(data => {
+        alert("Profile updated successfully!");
+        document.getElementById("accountDetails").innerText =
+            `Name: ${data.name}, Email: ${data.email}`;
+        document.getElementById("editForm").style.display = "none";
+    })
+    .catch(error => {
+        console.error("Error saving profile:", error);
+        alert("Failed to save profile: " + error.message);
+    });
+}
   </script>
 </body>
 </html>

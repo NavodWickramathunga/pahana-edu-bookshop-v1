@@ -35,7 +35,7 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/AdminLogin.html")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/AdminDashboard.html")
+                .defaultSuccessUrl("/AdminDashboard.html") // <--- This line ensures redirection to AdminDashboard.html
                 .permitAll()
             )
             .logout(logout -> logout

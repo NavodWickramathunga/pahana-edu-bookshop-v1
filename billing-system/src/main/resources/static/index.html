@@ -75,8 +75,8 @@
             </div>
             <div class="flex items-center space-x-4">
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors">Advanced Search</a>
-                <a href="user-login.html" class="text-gray-600 hover:text-primary transition-colors">User Login</a>
-                <a href="admin-login.html" class="text-gray-600 hover:text-primary transition-colors">Admin Login</a>
+                <a href="UserLogin.html" class="text-gray-600 hover:text-primary transition-colors">User Login</a>
+                <a href="AdminLogin.html" class="text-gray-600 hover:text-primary transition-colors">Admin Login</a>
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors">My Account</a>
                 <a href="/help.html" class="text-gray-600 hover:text-primary transition-colors">Help</a>
                 <button onclick="logout()" class="text-gray-600 hover:text-primary transition-colors">Exit</button>
@@ -99,7 +99,7 @@
                 <li><a href="#" class="hover:underline">Branches</a></li>
             </ul>
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
+            <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Open mobile menu">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                 </svg>
@@ -138,10 +138,10 @@
                 <div class="w-full flex-shrink-0"><img src="https://placehold.co/1200x400/1a73e8/ffffff?text=Shop+International+Titles" alt="Banner 3" class="w-full object-cover rounded-lg"></div>
             </div>
             <!-- Carousel Nav Buttons -->
-            <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none">
+            <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none" aria-label="Previous slide">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none">
+            <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none" aria-label="Next slide">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
         </div>
@@ -378,13 +378,18 @@
     });
 
     // Add to Cart buttons
-    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const bookTitle = button.closest('.bg-white').querySelector('h3').textContent;
-            showMessage(`Added "${bookTitle}" to your cart!`);
-        });
+    // Current client-side implementation
+const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const bookTitle = button.closest('.bg-white').querySelector('h3').textContent;
+        showMessage(`Added "${bookTitle}" to your cart!`); // This is just a message
+        // To connect to API:
+        // const itemId = button.dataset.itemId; // Assuming you add data-item-id to your button
+        // const itemPrice = parseFloat(button.dataset.itemPrice); // Assuming data-item-price
+        // addItemToCart(itemId, bookTitle, itemPrice, 1); // Call a shared function
     });
+});
 
     // Quick View buttons
     const quickViewButtons = document.querySelectorAll('.quick-view-btn');
@@ -397,14 +402,14 @@
 
     // Logout function
     function logout() {
-        fetch("/logout", { method: "POST" })
-            .then(() => {
-                window.location.href = "/index.html";
-            })
-            .catch(error => {
-                showMessage(`Error logging out: ${error.message}`);
-            });
-    }
+    fetch("/logout", { method: "POST" }) // Assuming /logout invalidates session
+        .then(() => {
+            window.location.href = "/index.html"; // Redirect to home page
+        })
+        .catch(error => {
+            showMessage(`Error logging out: ${error.message}`);
+        });
+}
 
     // Checkout function
     function checkout(cart) {

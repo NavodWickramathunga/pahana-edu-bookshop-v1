@@ -255,98 +255,99 @@
         }
 
         async function saveProfile() {
-            const username = document.getElementById('profileUsername').value;
-            const email = document.getElementById('profileEmail').value;
-            const user = { id: userId, username, email };
+    const username = document.getElementById('profileUsername').value;
+    const email = document.getElementById('profileEmail').value;
+    const user = { id: userId, username, email }; // userId is defined at the top of the script
 
-            try {
-                const response = await fetch(`/api/users/${userId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(user)
-                });
-                if (response.ok) {
-                    alert('Profile updated successfully!');
-                    hideModal('profileModal');
-                } else {
-                    alert('Failed to update profile.');
-                }
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                alert('An error occurred.');
-            }
+    try {
+        const response = await fetch(`/api/users/${userId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
+        if (response.ok) {
+            alert('Profile updated successfully!');
+            hideModal('profileModal'); // Hide the modal
+        } else {
+            alert('Failed to update profile.');
         }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('An error occurred.');
+    }
+}
 
         async function loadCartItems() {
-            try {
-                const response = await fetch(`/api/cart/${userId}`);
-                const cart = await response.json();
-                const cartItemsDiv = document.getElementById('cart-items');
-                cartItemsDiv.innerHTML = '';
-                cart.items.forEach(item => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
-                    itemDiv.innerHTML = `
-                        <div>
-                            <p class="text-gray-700">${item.name}</p>
-                            <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
-                        </div>
-                        <button 
-                            onclick="removeItemFromCart(${item.itemId})" 
-                            class="bg-red-500 text-white py-1 px-2 rounded-lg shadow hover:bg-red-600 transition duration-200" 
-                            role="button" 
-                            aria-label="Remove ${item.name} from Cart"
-                        >
-                            Remove
-                        </button>
-                    `;
-                    cartItemsDiv.appendChild(itemDiv);
-                });
-            } catch (error) {
-                console.error('Error loading cart:', error);
-                alert('Failed to load cart.');
-            }
-        }
+    try {
+        const response = await fetch(`/api/cart/${userId}`);
+        const cart = await response.json();
+        const cartItemsDiv = document.getElementById('cart-items'); // This is the div inside the modal
+        cartItemsDiv.innerHTML = '';
+        cart.items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
+            itemDiv.innerHTML = `
+                <div>
+                    <p class="text-gray-700">${item.name}</p>
+                    <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
+                </div>
+                <button 
+                    onclick="removeItemFromCart(${item.itemId})" 
+                    class="bg-red-500 text-white py-1 px-2 rounded-lg shadow hover:bg-red-600 transition duration-200" 
+                    role="button" 
+                    aria-label="Remove ${item.name} from Cart"
+                >
+                    Remove
+                </button>
+            `;
+            cartItemsDiv.appendChild(itemDiv);
+        });
+    } catch (error) {
+        console.error('Error loading cart:', error);
+        alert('Failed to load cart.');
+    }
+}
+
 
         async function addItemToCart() {
-            const newItem = {
-                itemId: Date.now(), // Temporary ID
-                name: "Sample Book",
-                price: 1000.00,
-                quantity: 1
-            };
-            try {
-                const response = await fetch(`/api/cart/${userId}/items`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newItem)
-                });
-                if (response.ok) {
-                    loadCartItems();
-                } else {
-                    alert('Failed to add item.');
-                }
-            } catch (error) {
-                console.error('Error adding item:', error);
-                alert('An error occurred.');
-            }
+    const newItem = {
+        itemId: Date.now(), // Temporary ID
+        name: "Sample Book",
+        price: 1000.00,
+        quantity: 1
+    };
+    try {
+        const response = await fetch(`/api/cart/${userId}/items`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newItem)
+        });
+        if (response.ok) {
+            loadCartItems(); // Refresh the modal's cart display
+        } else {
+            alert('Failed to add item.');
         }
+    } catch (error) {
+        console.error('Error adding item:', error);
+        alert('An error occurred.');
+    }
+}
 
         async function removeItemFromCart(itemId) {
-            try {
-                const response = await fetch(`/api/cart/${userId}/items/${itemId}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    loadCartItems();
-                } else {
-                    alert('Failed to remove item.');
-                }
-            } catch (error) {
-                console.error('Error removing item:', error);
-                alert('An error occurred.');
-            }
+    try {
+        const response = await fetch(`/api/cart/${userId}/items/${itemId}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            loadCartItems(); // Refresh the modal's cart display
+        } else {
+            alert('Failed to remove item.');
         }
+    } catch (error) {
+        console.error('Error removing item:', error);
+        alert('An error occurred.');
+    }
+}
     </script>
 </body>
 </html>

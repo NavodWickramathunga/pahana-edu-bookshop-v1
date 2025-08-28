@@ -50,79 +50,79 @@
         </div>
     </footer>
     <script>
-        const userId = 1; // Replace with actual user ID
+        const userId = 1; // IMPORTANT: Replace with actual user ID
 
-        async function loadCart() {
-            try {
-                const response = await fetch(`/api/cart/${userId}`);
-                const cart = await response.json();
-                const cartItemsDiv = document.getElementById('cart-items');
-                cartItemsDiv.innerHTML = '';
-                cart.items.forEach(item => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
-                    itemDiv.innerHTML = `
-                        <div>
-                            <p class="text-gray-700">${item.name}</p>
-                            <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
-                        </div>
-                        <button 
-                            onclick="removeItemFromCart(${item.itemId})" 
-                            class="bg-red-500 text-white py-1 px-2 rounded-lg shadow hover:bg-red-600 transition duration-200" 
-                            role="button" 
-                            aria-label="Remove ${item.name} from Cart"
-                        >
-                            Remove
-                        </button>
-                    `;
-                    cartItemsDiv.appendChild(itemDiv);
-                });
-            } catch (error) {
-                console.error('Error loading cart:', error);
-                alert('Failed to load cart.');
-            }
-        }
+async function loadCart() {
+    try {
+        const response = await fetch(`/api/cart/${userId}`);
+        const cart = await response.json();
+        const cartItemsDiv = document.getElementById('cart-items');
+        cartItemsDiv.innerHTML = '';
+        cart.items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow';
+            itemDiv.innerHTML = `
+                <div>
+                    <p class="text-gray-700">${item.name}</p>
+                    <p class="text-gray-600">$${item.price} x ${item.quantity}</p>
+                </div>
+                <button 
+                    onclick="removeItemFromCart(${item.itemId})" 
+                    class="bg-red-500 text-white py-1 px-2 rounded-lg shadow hover:bg-red-600 transition duration-200" 
+                    role="button" 
+                    aria-label="Remove ${item.name} from Cart"
+                >
+                    Remove
+                </button>
+            `;
+            cartItemsDiv.appendChild(itemDiv);
+        });
+    } catch (error) {
+        console.error('Error loading cart:', error);
+        alert('Failed to load cart.');
+    }
+}
+window.onload = loadCart; // For cart.html
 
         async function addItemToCart() {
-            // Example item (replace with form/modal for real use)
-            const newItem = {
-                itemId: Date.now(), // Temporary ID
-                name: "Sample Book",
-                price: 1000.00,
-                quantity: 1
-            };
-            try {
-                const response = await fetch(`/api/cart/${userId}/items`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newItem)
-                });
-                if (response.ok) {
-                    loadCart();
-                } else {
-                    alert('Failed to add item.');
-                }
-            } catch (error) {
-                console.error('Error adding item:', error);
-                alert('An error occurred.');
-            }
+    const newItem = {
+        itemId: Date.now(), // Temporary ID, replace with actual item ID
+        name: "Sample Book",
+        price: 1000.00,
+        quantity: 1
+    };
+    try {
+        const response = await fetch(`/api/cart/${userId}/items`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newItem)
+        });
+        if (response.ok) {
+            loadCart(); // or loadCartItems() for checkout.html
+        } else {
+            alert('Failed to add item.');
         }
+    } catch (error) {
+        console.error('Error adding item:', error);
+        alert('An error occurred.');
+    }
+}
 
         async function removeItemFromCart(itemId) {
-            try {
-                const response = await fetch(`/api/cart/${userId}/items/${itemId}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    loadCart();
-                } else {
-                    alert('Failed to remove item.');
-                }
-            } catch (error) {
-                console.error('Error removing item:', error);
-                alert('An error occurred.');
-            }
+    try {
+        const response = await fetch(`/api/cart/${userId}/items/${itemId}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            loadCart();
+        } else {
+            alert('Failed to remove item.');
         }
+    } catch (error) {
+        console.error('Error removing item:', error);
+        alert('An error occurred.');
+    }
+}
 
         // Load cart on page load
         window.onload = loadCart;
