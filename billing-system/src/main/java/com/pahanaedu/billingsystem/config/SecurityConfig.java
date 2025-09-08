@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .requestMatchers("/AdminLogin.html", "/login").permitAll()
                 .requestMatchers("/api/users/**", "/api/cart/**").authenticated()
                 .requestMatchers("/api/users/**", "/api/cart/**", "/api/bills/**").authenticated()
+                .requestMatchers("/api/items").hasRole("ADMIN") // POST requires ADMIN
+                .requestMatchers("/api/items").permitAll() // GET is public
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form

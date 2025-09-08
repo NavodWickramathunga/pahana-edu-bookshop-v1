@@ -2,7 +2,6 @@ package com.pahanaedu.billingsystem.controller;
 
 import com.pahanaedu.billingsystem.model.Item;
 import com.pahanaedu.billingsystem.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,32 +11,22 @@ import java.util.List;
 @RequestMapping("/api/items")
 public class ItemController {
 
-    @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
 
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
+
+    // Get all items
     @GetMapping
-    public ResponseEntity<List<Item>> getAllItems() {
-        return ResponseEntity.ok(itemService.getAllItems());
+    public List<Item> getItems() {
+        return itemService.getAllItems();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Item> getItemById(@PathVariable String id) {
-        return ResponseEntity.ok(itemService.getItemById(id));
-    }
-
+    // Add a new item (admin only)
     @PostMapping
     public ResponseEntity<Item> addItem(@RequestBody Item item) {
-        return ResponseEntity.ok(itemService.addItem(item));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Item> updateItem(@PathVariable String id, @RequestBody Item item) {
-        return ResponseEntity.ok(itemService.updateItem(id, item));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable String id) {
-        itemService.deleteItem(id);
-        return ResponseEntity.ok().build();
+        Item savedItem = itemService.addItem(item);
+        return ResponseEntity.ok(savedItem);
     }
 }

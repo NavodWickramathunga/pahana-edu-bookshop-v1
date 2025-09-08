@@ -146,6 +146,15 @@
             </button>
         </div>
 
+        <!-- Add this section in index.html where you want to display items -->
+        <!-- This section is now handled by loadItems() function below -->
+        <section id="items-display" class="p-6 bg-white rounded shadow-md mt-8">
+            <h2 class="text-2xl font-bold mb-4">Available Items</h2>
+            <div id="itemsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Items will be loaded here by loadItems() -->
+            </div>
+        </section>
+
         <!-- Book Categories Section -->
         <section class="mb-8">
             <h2 class="text-2xl font-semibold mb-4">Explore Categories</h2>
@@ -159,7 +168,15 @@
             </div>
         </section>
 
-        <!-- Featured Arrivals Section -->
+        <!-- Dynamic Items Section -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Our Products</h2>
+            <div id="dynamicItemsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Items will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Featured Arrivals Section (Original content, can be removed if replaced by dynamic items) -->
         <section class="mb-8">
             <h2 class="text-2xl font-semibold mb-4">Featured Arrivals</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -234,7 +251,7 @@
             </div>
         </section>
 
-        <!-- Bestsellers Section -->
+        <!-- Bestsellers Section (Original content, can be removed if replaced by dynamic items) -->
         <section>
             <h2 class="text-2xl font-semibold mb-4">Bestsellers</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -377,41 +394,46 @@
         modal.classList.add('hidden');
     });
 
-    // Add to Cart buttons
-    // Current client-side implementation
-const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
-addToCartButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const bookTitle = button.closest('.bg-white').querySelector('h3').textContent;
-        showMessage(`Added "${bookTitle}" to your cart!`); // This is just a message
-        // To connect to API:
-        // const itemId = button.dataset.itemId; // Assuming you add data-item-id to your button
-        // const itemPrice = parseFloat(button.dataset.itemPrice); // Assuming data-item-price
-        // addItemToCart(itemId, bookTitle, itemPrice, 1); // Call a shared function
-    });
-});
-
-    // Quick View buttons
-    const quickViewButtons = document.querySelectorAll('.quick-view-btn');
-    quickViewButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const bookTitle = button.closest('.bg-white').querySelector('h3').textContent;
-            showMessage(`Quick View for "${bookTitle}" is not implemented yet.`);
+    // Add to Cart buttons (updated to handle dynamic items)
+    // This function will be called when dynamic items are loaded
+    function setupAddToCartButtons() {
+        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const bookTitle = button.closest('.bg-white').querySelector('h3').textContent;
+                showMessage(`Added "${bookTitle}" to your cart!`);
+                // TODO: Implement actual add to cart logic using item.id and item.price
+                // const itemId = button.dataset.itemId;
+                // const itemPrice = parseFloat(button.dataset.itemPrice);
+                // addItemToCart(itemId, bookTitle, itemPrice, 1);
+            });
         });
-    });
+    }
+
+    // Quick View buttons (updated to handle dynamic items)
+    // This function will be called when dynamic items are loaded
+    function setupQuickViewButtons() {
+        const quickViewButtons = document.querySelectorAll('.quick-view-btn');
+        quickViewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const bookTitle = button.closest('.bg-white').querySelector('h3').textContent;
+                showMessage(`Quick View for "${bookTitle}" is not implemented yet.`);
+            });
+        });
+    }
 
     // Logout function
     function logout() {
-    fetch("/logout", { method: "POST" }) // Assuming /logout invalidates session
-        .then(() => {
-            window.location.href = "/index.html"; // Redirect to home page
-        })
-        .catch(error => {
-            showMessage(`Error logging out: ${error.message}`);
-        });
-}
+        fetch("/logout", { method: "POST" }) // Assuming /logout invalidates session
+            .then(() => {
+                window.location.href = "/index.html"; // Redirect to home page
+            })
+            .catch(error => {
+                showMessage(`Error logging out: ${error.message}`);
+            });
+    }
 
-    // Checkout function
+    // Checkout function (placeholder)
     function checkout(cart) {
         fetch("/api/bill", {
             method: "POST",
@@ -428,22 +450,109 @@ addToCartButtons.forEach(button => {
         });
     }
 
-    // Add Item Form for Admin Dashboard
-    async function addItem(itemData) {
+    // Function to load items for the "Available Items" section
+    async function loadItems() {
         try {
-            const response = await fetch('/api/items', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(itemData)
+            const response = await fetch('http://localhost:8080/api/items', {
+                credentials: 'include' // Added credentials: 'include'
             });
-            if (!response.ok) throw new Error('Failed to add item');
-            const data = await response.json();
-            showMessage(`Item "${data.name}" added successfully!`);
+
+            if (!response.ok) {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    const htmlError = await response.text();
+                    throw new Error(`Server returned HTML instead of JSON for Available Items. Status: ${response.status}. Content: ${htmlError.substring(0, 100)}...`);
+                }
+                throw new Error(`Failed to fetch items for Available Items: ${response.status} ${response.statusText}`);
+            }
+
+            const items = await response.json();
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            if (items.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 text-center col-span-full">No items available yet.</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'border rounded p-4 shadow hover:shadow-lg transition';
+
+                card.innerHTML = `
+                    <img src="${item.imageUrl || 'https://via.placeholder.com/150'}" alt="${item.name}" class="w-full h-40 object-cover mb-4 rounded" />
+                    <h3 class="text-lg font-semibold mb-2">${item.name}</h3>
+                    <p class="text-gray-700 mb-2">${item.description || ''}</p>
+                    <p class="font-bold text-primary">LKR ${item.price.toFixed(2)}</p>
+                `;
+                container.appendChild(card);
+            });
         } catch (error) {
-            showMessage(`Error: ${error.message}`);
+            console.error('Error loading items for itemsContainer:', error);
+            document.getElementById('itemsContainer').innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load items. Please try again later.</p>';
         }
     }
-</script>
 
+    // Function to load items dynamically from the backend for "Our Products" section
+    async function loadDynamicItems() {
+        try {
+            const response = await fetch('http://localhost:8080/api/items', {
+                credentials: 'include' // Added credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    const htmlError = await response.text();
+                    throw new Error(`Server returned HTML instead of JSON for Our Products. Status: ${response.status}. Content: ${htmlError.substring(0, 100)}...`);
+                }
+                throw new Error(`Failed to fetch items for Our Products: ${response.status} ${response.statusText}`);
+            }
+
+            const items = await response.json();
+            const dynamicItemsContainer = document.getElementById('dynamicItemsContainer');
+            dynamicItemsContainer.innerHTML = ''; // Clear existing content
+
+            if (items.length === 0) {
+                dynamicItemsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">No items available yet. Check back later!</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col justify-between hover:shadow-xl transition-shadow';
+                itemCard.innerHTML = `
+                    <img src="https://placehold.co/200x300/e0e0e0/333333?text=${encodeURIComponent(item.name)}" alt="${item.name}" class="w-full h-48 object-contain mb-4 rounded-md">
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">${item.name}</h3>
+                        <p class="text-gray-600 mb-2">Stock: ${item.stock}</p>
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="text-xl font-bold text-primary transition-colors">LKR ${parseFloat(item.price).toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex space-x-2">
+                        <button class="flex-1 bg-primary text-white py-2 rounded-md hover:bg-primary-light transition-colors quick-view-btn" data-item-id="${item.id}">Quick View</button>
+                        <button class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300 transition-colors add-to-cart-btn" data-item-id="${item.id}" data-item-price="${item.price}">Add to Cart</button>
+                    </div>
+                `;
+                dynamicItemsContainer.appendChild(itemCard);
+            });
+
+            // After loading dynamic items, set up their event listeners
+            setupAddToCartButtons();
+            setupQuickViewButtons();
+
+        } catch (error) {
+            console.error('Error loading dynamic items:', error);
+            document.getElementById('dynamicItemsContainer').innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load items. Please try again later.</p>';
+        }
+    }
+
+    // Call loadItems and loadDynamicItems when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        loadItems(); // For the "Available Items" section
+        loadDynamicItems(); // For the "Our Products" section
+    });
+</script>
 </body>
 </html>

@@ -1,17 +1,22 @@
 package com.pahanaedu.billingsystem.controller;
 
-import com.pahanaedu.billingsystem.model.Bill;
-import com.pahanaedu.billingsystem.model.Item;
-import com.pahanaedu.billingsystem.service.BillService;
-import com.pahanaedu.billingsystem.service.ItemService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.pahanaedu.billingsystem.model.Bill;
+import com.pahanaedu.billingsystem.model.Item;
+import com.pahanaedu.billingsystem.service.BillService;
+import com.pahanaedu.billingsystem.service.ItemService;
 
 @RestController
 @RequestMapping("/api/bills")
@@ -23,11 +28,11 @@ public class BillController {
     @Autowired
     private BillService billService;
 
-
     @GetMapping("/items")
     public ResponseEntity<List<Item>> getItemsInStock() {
         List<Item> items = itemService.getAllItems();
-        items.removeIf(item -> item.getStock() == null || item.getStock() <= 0);
+        // Since quantity is primitive int, no null check needed
+        items.removeIf(item -> item.getQuantity() <= 0);
         return ResponseEntity.ok(items);
     }
 
@@ -39,7 +44,8 @@ public class BillController {
 
     @GetMapping("/download/{billId}")
     public ResponseEntity<ByteArrayResource> downloadBill(@PathVariable Long billId) throws Exception {
-        Bill bill = billService.findById(billId).orElseThrow(() -> new RuntimeException("Bill not found"));
+        Bill bill = billService.findById(billId)
+                .orElseThrow(() -> new RuntimeException("Bill not found"));
         byte[] pdfBytes = billService.generateBillPdf(bill);
         ByteArrayResource resource = new ByteArrayResource(pdfBytes);
         return ResponseEntity.ok()
@@ -51,7 +57,8 @@ public class BillController {
 
     @PostMapping("/email/{billId}")
     public ResponseEntity<Void> sendBillEmail(@PathVariable Long billId) throws Exception {
-        Bill bill = billService.findById(billId).orElseThrow(() -> new RuntimeException("Bill not found"));
+        Bill bill = billService.findById(billId)
+                .orElseThrow(() -> new RuntimeException("Bill not found"));
         byte[] pdfBytes = billService.generateBillPdf(bill);
         billService.sendBillEmail(bill, pdfBytes);
         return ResponseEntity.ok().build();
