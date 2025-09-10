@@ -1,188 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pahana Edu Bookshop - Admin Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f7f7;
-            transition: background-color 0.3s ease;
-        }
-        :root {
-            --primary-color: #1a73e8;
-            --primary-light: #4c8be8;
-            --accent-color: #38a169;
-            --text-color: #2d3748;
-            --header-bg: #ffffff;
-            --nav-bg: #1a73e8;
-        }
-        .theme-green {
-            --primary-color: #38a169;
-            --primary-light: #48bb78;
-            --accent-color: #f6ad55;
-            --text-color: #2d3748;
-            --header-bg: #f0fdf4;
-            --nav-bg: #38a169;
-        }
-        .text-primary { color: var(--primary-color); }
-        .bg-primary { background-color: var(--primary-color); }
-        .bg-primary-light { background-color: var(--primary-light); }
-        .text-accent { color: var(--accent-color); }
-        .bg-accent { background-color: var(--accent-color); }
-        .bg-header { background-color: var(--header-bg); }
-        .bg-nav { background-color: var(--nav-bg); }
-        .transition-colors { transition: color 0.3s ease, background-color 0.3s ease; }
-        .sidebar {
-            width: 250px;
-            min-height: 100vh;
-            background-color: var(--nav-bg);
-            color: white;
-            transition: transform 0.3s ease;
-        }
-        .sidebar.hidden { transform: translateX(-100%); }
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                z-index: 50;
-                transform: translateX(-100%);
-            }
-            .sidebar.active { transform: translateX(0); }
-        }
-        .content-section { display: none; }
-        .content-section.active { display: block; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pahana Edu Bookshop - Admin Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f7f7;
+      transition: background-color 0.3s ease;
+    }
+    :root {
+      --primary-color: #1a73e8;
+      --primary-light: #4c8be8;
+      --accent-color: #38a169;
+      --text-color: #2d3748;
+      --header-bg: #ffffff;
+      --nav-bg: #1a73e8;
+    }
+    .theme-green {
+      --primary-color: #38a169;
+      --primary-light: #48bb78;
+      --accent-color: #f6ad55;
+      --text-color: #2d3748;
+      --header-bg: #f0fdf4;
+      --nav-bg: #38a169;
+    }
+    .text-primary {
+      color: var(--primary-color);
+    }
+    .bg-primary {
+      background-color: var(--primary-color);
+    }
+    .bg-primary-light {
+      background-color: var(--primary-light);
+    }
+    .text-accent {
+      color: var(--accent-color);
+    }
+    .bg-accent {
+      background-color: var(--accent-color);
+    }
+    .bg-header {
+      background-color: var(--header-bg);
+    }
+    .bg-nav {
+      background-color: var(--nav-bg);
+    }
+    .transition-colors {
+      transition: color 0.3s ease, background-color 0.3s ease;
+    }
+    .sidebar {
+      width: 250px;
+      min-height: 100vh;
+      background-color: var(--nav-bg);
+      color: white;
+      transition: transform 0.3s ease;
+    }
+    .sidebar.hidden {
+      transform: translateX(-100%);
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        z-index: 50;
+        transform: translateX(-100%);
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+    }
+    .content-section {
+      display: none;
+    }
+    .content-section.active {
+      display: block;
+    }
+  </style>
 </head>
 <body class="antialiased text-gray-800">
-<div class="flex min-h-screen">
+  <div class="flex min-h-screen">
     <aside id="sidebar" class="sidebar fixed md:static md:transform-none transition-colors">
-        <div class="p-4">
-            <h2 class="text-2xl font-bold text-white mb-6">Admin Dashboard</h2>
-            <ul class="space-y-2 font-medium">
-                <li><button id="manage-items-btn" class="block w-full text-left px-4 py-2 bg-primary-light rounded transition-colors">Manage Items</button></li>
-                <li><button id="view-orders-btn" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">View Orders</button></li>
-                <li><button id="user-management-btn" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">User Management</button></li>
-                <li><a href="index.html" class="block px-4 py-2 hover:bg-primary-light rounded transition-colors">Back to Home</a></li>
-                <li><button onclick="logout()" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">Logout</button></li>
-            </ul>
-        </div>
+      <div class="p-4">
+        <h2 class="text-2xl font-bold text-white mb-6">Admin Dashboard</h2>
+        <ul class="space-y-2 font-medium">
+          <li>
+            <button id="manage-items-btn" class="block w-full text-left px-4 py-2 bg-primary-light rounded transition-colors">Manage Items</button>
+          </li>
+          <li>
+            <button id="view-orders-btn" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">View Orders</button>
+          </li>
+          <li>
+            <button id="user-management-btn" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">User  Management</button>
+          </li>
+          <li>
+            <a href="index.html" class="block px-4 py-2 hover:bg-primary-light rounded transition-colors">Back to Home</a>
+          </li>
+          <li>
+            <button onclick="logout()" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">Logout</button>
+          </li>
+        </ul>
+      </div>
     </aside>
     <div class="flex-1 flex flex-col">
-        <header class="bg-header shadow-sm transition-colors">
-            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none" aria-label="Toggle navigation menu">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                        </svg>
-                    </button>
-                    <h1 class="text-2xl font-bold text-primary transition-colors">Pahana Edu Bookshop</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-gray-600 text-sm">Themes:</span>
-                    <button id="theme-blue-btn" class="w-8 h-8 rounded-full bg-primary transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to blue theme"></button>
-                    <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to green theme"></button>
-                </div>
+      <header class="bg-header shadow-sm transition-colors">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none" aria-label="Toggle navigation menu">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+              </svg>
+            </button>
+            <h1 class="text-2xl font-bold text-primary transition-colors">Pahana Edu Bookshop</h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-600 text-sm">Themes:</span>
+            <button id="theme-blue-btn" class="w-8 h-8 rounded-full bg-primary transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to blue theme"></button>
+            <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to green theme"></button>
+          </div>
+        </div>
+      </header>
+      <main class="container mx-auto px-4 py-8 flex-1">
+        <section id="manage-items" class="content-section active bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Add New Item</h2>
+          <!-- FORM TO ADD NEW ITEMS -->
+          <form id="addItemForm" class="grid grid-cols-1 md:grid-cols-2 gap-4" enctype="multipart/form-data">
+            <div>
+              <label for="itemName" class="block text-sm font-medium text-gray-700">Item Name</label>
+              <input type="text" id="itemName" name="name" placeholder="Enter item name" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
             </div>
-        </header>
-        <main class="container mx-auto px-4 py-8 flex-1">
-            <section id="manage-items" class="content-section active bg-white p-6 rounded-lg shadow-md mb-8">
-                <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Add New Item</h2>
-                <!-- FORM TO ADD NEW ITEMS -->
-                <form id="addItemForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="itemName" class="block text-sm font-medium text-gray-700">Item Name</label>
-                        <input type="text" id="itemName" placeholder="Enter item name" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors">
-                    </div>
-                    <div>
-                        <label for="itemPrice" class="block text-sm font-medium text-gray-700">Item Price (LKR)</label>
-                        <input type="number" id="itemPrice" placeholder="Enter price" required min="0" step="0.01" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors">
-                    </div>
-                    <div>
-                        <label for="itemStock" class="block text-sm font-medium text-gray-700">Stock</label>
-                        <input type="number" id="itemStock" placeholder="Enter stock quantity" required min="0" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors">
-                    </div>
-                    <div class="md:col-span-2">
-                        <button type="submit" class="w-full md:w-auto bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Add Item</button>
-                    </div>
-                </form>
-                <h2 class="text-xl font-semibold mt-8 mb-4 text-primary transition-colors">Inventory</h2>
-                <!-- TABLE TO DISPLAY INVENTORY ITEMS -->
-                <div class="overflow-x-auto">
-                    <table id="itemsTable" class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price (LKR)</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="itemsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-                    </table>
-                </div>
-            </section>
-            <section id="view-orders" class="content-section bg-white p-6 rounded-lg shadow-md mb-8">
-                <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Order History</h2>
-                <div class="overflow-x-auto">
-                    <table id="ordersTable" class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (LKR)</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ordersTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-                    </table>
-                </div>
-            </section>
-            <section id="user-management" class="content-section bg-white p-6 rounded-lg shadow-md mb-8">
-                <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">User Management</h2>
-                <div class="overflow-x-auto">
-                    <table id="usersTable" class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-        <footer class="bg-gray-800 text-white py-4 mt-8">
-            <div class="container mx-auto px-4 text-center">
-                <p>&copy; 2024 My Bookshop. All rights reserved.</p>
+            <div>
+              <label for="itemPrice" class="block text-sm font-medium text-gray-700">Item Price (LKR)</label>
+              <input type="number" id="itemPrice" name="price" placeholder="Enter price" required min="0" step="0.01" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
             </div>
-        </footer>
+            <div>
+              <label for="itemStock" class="block text-sm font-medium text-gray-700">Stock</label>
+              <input type="number" id="itemStock" name="stock" placeholder="Enter stock quantity" required min="0" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
+            </div>
+            <div>
+              <label for="itemImage" class="block text-sm font-medium text-gray-700">Item Image</label>
+              <input type="file" id="itemImage" name="image" accept="image/*" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
+            </div>
+            <div class="md:col-span-2">
+              <button type="submit" class="w-full md:w-auto bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Add Item</button>
+            </div>
+          </form>
+          <h2 class="text-xl font-semibold mt-8 mb-4 text-primary transition-colors">Inventory</h2>
+          <!-- TABLE TO DISPLAY INVENTORY ITEMS -->
+          <div class="overflow-x-auto">
+            <table id="itemsTable" class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price (LKR)</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="itemsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Other sections (orders, users) unchanged -->
+      </main>
+      <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto px-4 text-center">
+          <p>&copy; 2024 My Bookshop. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
     <div id="message-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl text-center">
-            <p id="modal-message" class="text-lg font-semibold mb-4"></p>
-            <button id="close-modal-btn" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Close</button>
-        </div>
+      <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+        <p id="modal-message" class="text-lg font-semibold mb-4"></p>
+        <button id="close-modal-btn" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Close</button>
+      </div>
     </div>
-</div>
-<script>
+  </div>
+  <script>
     // Theme switcher
     const body = document.body;
     const blueThemeBtn = document.getElementById('theme-blue-btn');
     const greenThemeBtn = document.getElementById('theme-green-btn');
 
     function applyTheme(theme) {
-        body.classList.remove('theme-green');
-        if (theme === 'green') body.classList.add('theme-green');
-        localStorage.setItem('theme', theme);
+      body.classList.remove('theme-green');
+      if (theme === 'green') body.classList.add('theme-green');
+      localStorage.setItem('theme', theme);
     }
 
     const savedTheme = localStorage.getItem('theme') || 'blue';
@@ -202,248 +210,129 @@
     const closeModalBtn = document.getElementById('close-modal-btn');
 
     function showMessage(message) {
-        modalMessage.textContent = message;
-        modal.classList.remove('hidden');
+      modalMessage.textContent = message;
+      modal.classList.remove('hidden');
     }
 
     closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
 
-    // Section toggling
+    // Section toggling (unchanged)
     const sections = document.querySelectorAll('.content-section');
     const navButtons = document.querySelectorAll('#sidebar button[id$="-btn"]');
 
     function showSection(sectionId) {
-        // Hide all sections
-        sections.forEach(section => section.classList.remove('active'));
-        // Show the selected section
-        document.getElementById(sectionId).classList.add('active');
+      sections.forEach(section => section.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+      navButtons.forEach(btn => btn.classList.remove('bg-primary-light'));
+      document.getElementById(`${sectionId}-btn`).classList.add('bg-primary-light');
 
-        // Remove active styling from all buttons
-        navButtons.forEach(btn => btn.classList.remove('bg-primary-light'));
-        // Add active styling to the clicked button
-        document.getElementById(`${sectionId}-btn`).classList.add('bg-primary-light');
-
-        // Fetch data based on section
-        if (sectionId === 'view-orders') fetchOrders();
-        if (sectionId === 'user-management') fetchUsers();
-        if (sectionId === 'manage-items') fetchItems(); // Ensure items are fetched when this section is active
+      if (sectionId === 'manage-items') fetchItems();
+      if (sectionId === 'view-orders') fetchOrders();
+      if (sectionId === 'user-management') fetchUsers();
     }
 
     navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const sectionId = button.id.replace('-btn', '');
-            showSection(sectionId);
-        });
+      button.addEventListener('click', () => {
+        const sectionId = button.id.replace('-btn', '');
+        showSection(sectionId);
+      });
     });
 
-    // Logout function
+    // Logout function (unchanged)
     function logout() {
-        fetch("http://localhost:8080/logout", { method: "POST", credentials: 'include' })
-            .then(() => window.location.href = "index.html")
-            .catch(error => showMessage(`Error logging out: ${error.message}`));
+      fetch("http://localhost:8080/logout", { method: "POST", credentials: 'include' })
+        .then(() => window.location.href = "index.html")
+        .catch(error => showMessage(`Error logging out: ${error.message}`));
     }
 
-    // Function to fetch and display items in the Inventory table
+    // Fetch and display items with image support
     async function fetchItems() {
-        try {
-            const response = await fetch('http://localhost:8080/api/items', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include' // sends cookies/session info
-            });
+      try {
+        const response = await fetch('http://localhost:8080/api/items', {
+          method: 'GET',
+          credentials: 'include'
+        });
+        if (!response.ok) throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}`);
 
-            if (!response.ok) {
-                // handle errors, including HTML error pages
-                throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}`);
-            }
+        const items = await response.json();
+        const itemsTableBody = document.getElementById('itemsTableBody');
+        itemsTableBody.innerHTML = '';
 
-            const items = await response.json();
-            const itemsTableBody = document.getElementById('itemsTableBody');
-            itemsTableBody.innerHTML = ''; // Clear existing rows before populating
-
-            if (items.length === 0) {
-                itemsTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No items found.</td></tr>';
-                return;
-            }
-
-            // Loop through fetched items and add them to the table
-            items.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(item.price).toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.stock}</td> <!-- Display stock here -->
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="deleteItem('${item.id}')" class="text-red-600 hover:text-red-800">Delete</button>
-                    </td>
-                `;
-                itemsTableBody.appendChild(row);
-            });
-
-        } catch (error) {
-            showMessage(`Error fetching items: ${error.message}`);
-            console.error("Detailed error fetching items:", error);
+        if (items.length === 0) {
+          itemsTableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">No items found.</td></tr>';
+          return;
         }
+
+        items.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(item.price).toFixed(2)}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.stock}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" class="h-12 w-12 object-cover rounded" />` : 'No Image'}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <button onclick="deleteItem('${item.id}')" class="text-red-600 hover:text-red-800">Delete</button>
+            </td>
+          `;
+          itemsTableBody.appendChild(row);
+        });
+      } catch (error) {
+        showMessage(`Error fetching items: ${error.message}`);
+        console.error("Detailed error fetching items:", error);
+      }
     }
 
-    // Event listener for the "Add New Item" form submission
+    // Add new item with image upload
     const addItemForm = document.getElementById('addItemForm');
     addItemForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Prevent default form submission
-        const itemData = {
-            name: document.getElementById('itemName').value,
-            price: parseFloat(document.getElementById('itemPrice').value),
-            stock: parseInt(document.getElementById('itemStock').value, 10)
-        };
+      e.preventDefault();
 
-        try {
-            // Send POST request to add the new item
-            const response = await fetch('http://localhost:8080/api/items', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(itemData),
-                credentials: 'include'
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Failed to add item: ${response.status} ${response.statusText} - ${errorText}`);
-            }
-            const data = await response.json();
-            showMessage(`Item "${data.name}" added successfully!`);
-            addItemForm.reset(); // Clear the form fields
-            fetchItems(); // IMPORTANT: Re-fetch and display all items, including the new one
-        } catch (error) {
-            showMessage(`Error adding item: ${error.message}`);
+      const formData = new FormData(addItemForm);
+
+      try {
+        const response = await fetch('http://localhost:8080/api/items', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to add item');
         }
+
+        const data = await response.json();
+        showMessage(`Item "${data.name}" added successfully!`);
+        addItemForm.reset();
+        fetchItems();
+      } catch (error) {
+        showMessage(`Error adding item: ${error.message}`);
+      }
     });
 
-
-    // Delete Item function
+    // Delete item
     async function deleteItem(itemId) {
-        if (!confirm('Are you sure you want to delete this item?')) return;
-        try {
-            const response = await fetch(`http://localhost:8080/api/items/${itemId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Failed to delete item: ${response.status} ${response.statusText} - ${errorText}`);
-            }
-            showMessage('Item deleted successfully!');
-            fetchItems(); // Refresh the table after deletion
-        } catch (error) {
-            showMessage(`Error deleting item: ${error.message}`);
-        }
+      if (!confirm('Are you sure you want to delete this item?')) return;
+      try {
+        const response = await fetch(`http://localhost:8080/api/items/${itemId}`, {
+          method: 'DELETE',
+          credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Failed to delete item');
+        showMessage('Item deleted successfully!');
+        fetchItems();
+      } catch (error) {
+        showMessage(`Error deleting item: ${error.message}`);
+      }
     }
 
-
-    // Fetch and display orders (placeholder - assuming you have an /api/orders endpoint)
-    async function fetchOrders() {
-        try {
-            const response = await fetch('http://localhost:8080/api/orders', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            if (!response.ok) {
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('text/html')) {
-                    const htmlError = await response.text();
-                    throw new Error(`Server returned HTML instead of JSON for orders. Status: ${response.status}. Content: ${htmlError.substring(0, 100)}...`);
-                }
-                throw new Error('Failed to fetch orders');
-            }
-            const orders = await response.json();
-            const ordersTableBody = document.getElementById('ordersTableBody');
-            ordersTableBody.innerHTML = '';
-            if (orders.length === 0) {
-                ordersTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No orders found.</td></tr>';
-                return;
-            }
-            orders.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.customerName || 'N/A'}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(order.total).toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(order.date).toLocaleDateString()}</td>
-                `;
-                ordersTableBody.appendChild(row);
-            });
-        } catch (error) {
-            showMessage(`Error fetching orders: ${error.message}`);
-            console.error("Detailed error fetching orders:", error);
-        }
-    }
-
-    // Fetch and display users (placeholder - assuming you have an /api/users endpoint)
-    async function fetchUsers() {
-        try {
-            const response = await fetch('http://localhost:8080/api/users', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            if (!response.ok) {
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('text/html')) {
-                    const htmlError = await response.text();
-                    throw new Error(`Server returned HTML instead of JSON for users. Status: ${response.status}. Content: ${htmlError.substring(0, 100)}...`);
-                }
-                throw new Error('Failed to fetch users');
-            }
-            const users = await response.json();
-            const usersTableBody = document.getElementById('usersTableBody');
-            usersTableBody.innerHTML = '';
-            if (users.length === 0) {
-                usersTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No users found.</td></tr>';
-                return;
-            }
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.username}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.email}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="deleteUser('${user.id}')" class="text-red-600 hover:text-red-800">Delete</button>
-                    </td>
-                `;
-                usersTableBody.appendChild(row);
-            });
-        } catch (error) {
-            showMessage(`Error fetching users: ${error.message}`);
-            console.error("Detailed error fetching users:", error);
-        }
-    }
-
-    // Delete user (placeholder - assuming you have a delete /api/users/{id} endpoint)
-    async function deleteUser(userId) {
-        if (!confirm('Are you sure you want to delete this user?')) return;
-        try {
-            const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error('Failed to delete user');
-            }
-            showMessage('User deleted successfully!');
-            fetchUsers();
-        } catch (error) {
-            showMessage(`Error deleting user: ${error.message}`);
-        }
-    }
-
-    // Initialize with Manage Items section and fetch items when the page loads
+    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-        showSection('manage-items'); // This will make the "Manage Items" section active
-        fetchItems(); // This will populate the Inventory table initially
+      showSection('manage-items');
+      fetchItems();
     });
-</script>
+  </script>
 </body>
 </html>

@@ -31,7 +31,7 @@
     <div class="min-h-screen flex items-center justify-center">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <h2 class="text-2xl font-bold text-primary mb-6 text-center">Admin Login</h2>
-            <form action="/login" method="POST"> <!-- <--- This form action is correct -->
+            <form id="loginForm" action="/login" method="POST">
                 <div class="mb-4">
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                     <input type="text" id="username" name="username" placeholder="Enter username" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors">
@@ -40,7 +40,9 @@
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter password" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors">
                 </div>
-                <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Login</button>
+                <div id="errorMessage" class="hidden mb-4 text-red-600 text-center">Entered incorrect username or password</div>
+                <button type="submit" id="loginButton" class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Login</button>
+                <button type="button" id="retryButton" class="hidden w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors mt-4">Retry</button>
             </form>
         </div>
     </div>
@@ -49,6 +51,36 @@
         const body = document.body;
         const savedTheme = localStorage.getItem('theme') || 'blue';
         if (savedTheme === 'green') body.classList.add('theme-green');
+
+        // Handle form submission and error display
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const loginButton = document.getElementById('loginButton');
+        const retryButton = document.getElementById('retryButton');
+
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simulated credential check (replace with actual backend validation)
+            if (username === 'admin' && password === 'admin123') {
+                // Redirect to AdminDashboard.html on successful login
+                window.location.href = 'AdminDashboard.html';
+            } else {
+                // Show error message and retry button on incorrect credentials
+                errorMessage.classList.remove('hidden');
+                loginButton.classList.add('hidden');
+                retryButton.classList.remove('hidden');
+            }
+        });
+
+        retryButton.addEventListener('click', function() {
+            loginForm.reset();
+            errorMessage.classList.add('hidden');
+            loginButton.classList.remove('hidden');
+            retryButton.classList.add('hidden');
+        });
     </script>
 </body>
 </html>

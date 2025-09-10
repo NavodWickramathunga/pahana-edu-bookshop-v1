@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Pahana Edu Bookshop</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f7f7f7;
             transition: background-color 0.3s ease;
         }
-
         /* Default (Blue) Theme */
         :root {
             --primary-color: #1a73e8;
@@ -24,7 +23,6 @@
             --header-bg: #ffffff;
             --nav-bg: #1a73e8;
         }
-
         /* Green Theme */
         .theme-green {
             --primary-color: #38a169;
@@ -34,7 +32,6 @@
             --header-bg: #f0fdf4;
             --nav-bg: #38a169;
         }
-
         .text-primary {
             color: var(--primary-color);
         }
@@ -56,7 +53,6 @@
         .bg-nav {
             background-color: var(--nav-bg);
         }
-
         .transition-colors {
             transition: color 0.3s ease, background-color 0.3s ease;
         }
@@ -75,7 +71,7 @@
             </div>
             <div class="flex items-center space-x-4">
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors">Advanced Search</a>
-                <a href="UserLogin.html" class="text-gray-600 hover:text-primary transition-colors">User Login</a>
+                <a href="User Login.html" class="text-gray-600 hover:text-primary transition-colors">User Login</a>
                 <a href="AdminLogin.html" class="text-gray-600 hover:text-primary transition-colors">Admin Login</a>
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors">My Account</a>
                 <a href="/help.html" class="text-gray-600 hover:text-primary transition-colors">Help</a>
@@ -123,8 +119,8 @@
     <div class="container mx-auto px-4 py-4 flex justify-end">
         <div class="flex items-center space-x-2">
             <span class="text-gray-600 text-sm">Themes:</span>
-            <button id="theme-blue-btn" class="w-8 h-8 rounded-full bg-primary transition-colors border-2 border-transparent focus:border-gray-500"></button>
-            <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500"></button>
+            <button id="theme-blue-btn" class="w-8 h-8 rounded-full bg-primary transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to blue theme" title="Switch to blue theme"></button>
+            <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500" title="Switch to green theme" aria-label="Switch to green theme"></button>
         </div>
     </div>
 
@@ -138,41 +134,27 @@
                 <div class="w-full flex-shrink-0"><img src="https://placehold.co/1200x400/1a73e8/ffffff?text=Shop+International+Titles" alt="Banner 3" class="w-full object-cover rounded-lg"></div>
             </div>
             <!-- Carousel Nav Buttons -->
-            <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none" aria-label="Previous slide">
+            <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none" aria-label="Previous slide" title="Previous slide">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none" aria-label="Next slide">
+            <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all focus:outline-none" aria-label="Next slide" title="Next slide">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
         </div>
 
-        <!-- Add this section in index.html where you want to display items -->
-        <!-- This section is now handled by loadItems() function below -->
+        <!-- Available Items Section -->
         <section id="items-display" class="p-6 bg-white rounded shadow-md mt-8">
             <h2 class="text-2xl font-bold mb-4">Available Items</h2>
             <div id="itemsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Items will be loaded here by loadItems() -->
+                <!-- Items will be loaded here dynamically -->
             </div>
         </section>
 
-        <!-- Book Categories Section -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">Explore Categories</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <a href="#" class="bg-white p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">Fiction</a>
-                <a href="#" class="bg-white p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">Children</a>
-                <a href="#" class="bg-white p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">Novels</a>
-                <a href="#" class="bg-white p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">Translations</a>
-                <a href="#" class="bg-white p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">Short Stories</a>
-                <a href="#" class="bg-white p-4 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">Education</a>
-            </div>
-        </section>
-
-        <!-- Dynamic Items Section -->
+        <!-- Our Products Section -->
         <section class="mb-8">
             <h2 class="text-2xl font-semibold mb-4">Our Products</h2>
             <div id="dynamicItemsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <!-- Items will be loaded here by JavaScript -->
+                <!-- Items will be loaded here dynamically -->
             </div>
         </section>
 
@@ -344,8 +326,6 @@
 </div>
 
 <script>
-    // JavaScript for interactive components
-
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -374,7 +354,6 @@
         updateCarousel();
     });
 
-    // Auto-advance the carousel every 5 seconds
     setInterval(() => {
         currentIndex = (currentIndex + 1) % items.length;
         updateCarousel();
@@ -394,24 +373,30 @@
         modal.classList.add('hidden');
     });
 
-    // Add to Cart buttons (updated to handle dynamic items)
-    // This function will be called when dynamic items are loaded
+    // Logout function
+    function logout() {
+        fetch("/logout", { method: "POST" })
+            .then(() => {
+                window.location.href = "/index.html";
+            })
+            .catch(error => {
+                showMessage(`Error logging out: ${error.message}`);
+            });
+    }
+
+    // Add to Cart buttons setup
     function setupAddToCartButtons() {
         const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
         addToCartButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const bookTitle = button.closest('.bg-white').querySelector('h3').textContent;
                 showMessage(`Added "${bookTitle}" to your cart!`);
-                // TODO: Implement actual add to cart logic using item.id and item.price
-                // const itemId = button.dataset.itemId;
-                // const itemPrice = parseFloat(button.dataset.itemPrice);
-                // addItemToCart(itemId, bookTitle, itemPrice, 1);
+                // TODO: Implement actual add to cart logic
             });
         });
     }
 
-    // Quick View buttons (updated to handle dynamic items)
-    // This function will be called when dynamic items are loaded
+    // Quick View buttons setup
     function setupQuickViewButtons() {
         const quickViewButtons = document.querySelectorAll('.quick-view-btn');
         quickViewButtons.forEach(button => {
@@ -422,49 +407,13 @@
         });
     }
 
-    // Logout function
-    function logout() {
-        fetch("/logout", { method: "POST" }) // Assuming /logout invalidates session
-            .then(() => {
-                window.location.href = "/index.html"; // Redirect to home page
-            })
-            .catch(error => {
-                showMessage(`Error logging out: ${error.message}`);
-            });
-    }
-
-    // Checkout function (placeholder)
-    function checkout(cart) {
-        fetch("/api/bill", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(cart)
-        })
-        .then(res => res.json())
-        .then(data => {
-            alert("Total Bill: " + data.total);
-            window.print(); // Print the bill
-        })
-        .catch(error => {
-            showMessage(`Error during checkout: ${error.message}`);
-        });
-    }
-
-    // Function to load items for the "Available Items" section
+    // Load items for Available Items section
     async function loadItems() {
         try {
             const response = await fetch('http://localhost:8080/api/items', {
-                credentials: 'include' // Added credentials: 'include'
+                credentials: 'include'
             });
-
-            if (!response.ok) {
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('text/html')) {
-                    const htmlError = await response.text();
-                    throw new Error(`Server returned HTML instead of JSON for Available Items. Status: ${response.status}. Content: ${htmlError.substring(0, 100)}...`);
-                }
-                throw new Error(`Failed to fetch items for Available Items: ${response.status} ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}`);
 
             const items = await response.json();
             const container = document.getElementById('itemsContainer');
@@ -481,48 +430,41 @@
 
                 card.innerHTML = `
                     <img src="${item.imageUrl || 'https://via.placeholder.com/150'}" alt="${item.name}" class="w-full h-40 object-cover mb-4 rounded" />
-                    <h3 class="text-lg font-semibold mb-2">${item.name}</h3>
+                    <h3 class="font-bold text-lg mb-1">${item.name}</h3>
                     <p class="text-gray-700 mb-2">${item.description || ''}</p>
                     <p class="font-bold text-primary">LKR ${item.price.toFixed(2)}</p>
                 `;
                 container.appendChild(card);
             });
         } catch (error) {
-            console.error('Error loading items for itemsContainer:', error);
+            console.error('Error loading items:', error);
             document.getElementById('itemsContainer').innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load items. Please try again later.</p>';
         }
     }
 
-    // Function to load items dynamically from the backend for "Our Products" section
+    // Load items for Our Products section
     async function loadDynamicItems() {
         try {
             const response = await fetch('http://localhost:8080/api/items', {
-                credentials: 'include' // Added credentials: 'include'
+                credentials: 'include'
             });
-
-            if (!response.ok) {
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('text/html')) {
-                    const htmlError = await response.text();
-                    throw new Error(`Server returned HTML instead of JSON for Our Products. Status: ${response.status}. Content: ${htmlError.substring(0, 100)}...`);
-                }
-                throw new Error(`Failed to fetch items for Our Products: ${response.status} ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}`);
 
             const items = await response.json();
-            const dynamicItemsContainer = document.getElementById('dynamicItemsContainer');
-            dynamicItemsContainer.innerHTML = ''; // Clear existing content
+            const container = document.getElementById('dynamicItemsContainer');
+            container.innerHTML = '';
 
             if (items.length === 0) {
-                dynamicItemsContainer.innerHTML = '<p class="text-gray-600 text-center col-span-full">No items available yet. Check back later!</p>';
+                container.innerHTML = '<p class="text-gray-600 text-center col-span-full">No items available yet. Check back later!</p>';
                 return;
             }
 
             items.forEach(item => {
-                const itemCard = document.createElement('div');
-                itemCard.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col justify-between hover:shadow-xl transition-shadow';
-                itemCard.innerHTML = `
-                    <img src="https://placehold.co/200x300/e0e0e0/333333?text=${encodeURIComponent(item.name)}" alt="${item.name}" class="w-full h-48 object-contain mb-4 rounded-md">
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col justify-between hover:shadow-xl transition-shadow';
+
+                card.innerHTML = `
+                    <img src="${item.imageUrl || 'https://via.placeholder.com/200x300?text=No+Image'}" alt="${item.name}" class="w-full h-48 object-contain mb-4 rounded-md" />
                     <div>
                         <h3 class="font-bold text-lg mb-1">${item.name}</h3>
                         <p class="text-gray-600 mb-2">Stock: ${item.stock}</p>
@@ -535,23 +477,21 @@
                         <button class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300 transition-colors add-to-cart-btn" data-item-id="${item.id}" data-item-price="${item.price}">Add to Cart</button>
                     </div>
                 `;
-                dynamicItemsContainer.appendChild(itemCard);
+                container.appendChild(card);
             });
 
-            // After loading dynamic items, set up their event listeners
             setupAddToCartButtons();
             setupQuickViewButtons();
-
         } catch (error) {
             console.error('Error loading dynamic items:', error);
             document.getElementById('dynamicItemsContainer').innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load items. Please try again later.</p>';
         }
     }
 
-    // Call loadItems and loadDynamicItems when the page loads
+    // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-        loadItems(); // For the "Available Items" section
-        loadDynamicItems(); // For the "Our Products" section
+        loadItems();
+        loadDynamicItems();
     });
 </script>
 </body>

@@ -1,11 +1,14 @@
 package com.pahanaedu.billingsystem.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.pahanaedu.billingsystem.exception.ResourceNotFoundException;
 import com.pahanaedu.billingsystem.model.Item;
 import com.pahanaedu.billingsystem.repository.ItemRepository;
 
@@ -15,30 +18,33 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
+    private final String uploadDir = "uploads/";
+
     public List<Item> getAllItems() {
         return itemRepository.findAll();
     }
 
-    public Item getItemById(String id) {
-        return itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
-    }
-
-    public Item addItem(Item item) {
+    public Item saveItem(Item item) {
         return itemRepository.save(item);
     }
 
-    public Item updateItem(String id, Item itemDetails) {
-        Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
-        item.setName(itemDetails.getName());
-        item.setPrice(itemDetails.getPrice());
-        return itemRepository.save(item);
-    }
+    // Save image file and return URL path
+    public String saveImageAndGetUrl(MultipartFile imageFile) throws IOException {
+        File uploadPath = new File(uploadDir);
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
 
-    public void deleteItem(String id) {
-        Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + id));
-        itemRepository.delete(item);
+        String originalFilename = imageFile.getOriginalFilename();
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+        }
+        String filename = UUID.randomUUID().toString() + extension;
+
+        File destFile = new File(uploadPath, filename);
+        imageFile.transferTo(destFile);
+
+        return "/uploads/" + filename;
     }
 }

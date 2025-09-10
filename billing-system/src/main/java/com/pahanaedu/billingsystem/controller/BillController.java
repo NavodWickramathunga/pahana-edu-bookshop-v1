@@ -31,8 +31,8 @@ public class BillController {
     @GetMapping("/items")
     public ResponseEntity<List<Item>> getItemsInStock() {
         List<Item> items = itemService.getAllItems();
-        // Since quantity is primitive int, no null check needed
-        items.removeIf(item -> item.getQuantity() <= 0);
+        // Use getStock() instead of getQuantity()
+        items.removeIf(item -> item.getStock() <= 0);
         return ResponseEntity.ok(items);
     }
 
