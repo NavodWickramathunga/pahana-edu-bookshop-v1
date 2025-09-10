@@ -1,45 +1,79 @@
-Project Overview: Pahana Edu Billing System
+# 📚 Pahana Edu Billing System  
 
-This project delivers a robust and user-friendly billing system for "Pahana Edu Bookshop," encompassing a full-stack application designed to streamline operations from inventory management to customer billing. The system is built with a powerful Spring Boot backend and a dynamic, responsive frontend.
+A **full-stack billing system** designed for **Pahana Edu Bookshop**, combining a **Spring Boot backend** with a **responsive Tailwind CSS frontend**. This system streamlines **inventory management, customer billing, and PDF invoice generation**, making it efficient for both administrators and customers.  
 
-Key Features:
+---
 
-Secure Authentication and Authorization:
+## ✨ Key Features  
 
-Admin Login: Dedicated login page (AdminLogin.html) for administrators with credentials managed via application.properties and secured using Spring Security's BCryptPasswordEncoder.
-User Login & Registration: Separate interfaces (UserLogin.html) for customer login and self-registration, allowing users to create accounts with mobile numbers and passwords.
-Role-Based Access Control: Spring Security is configured to differentiate between user roles (e.g., ADMIN for item management) ensuring appropriate access to API endpoints.
-Comprehensive Item Management (CRUD Operations):
+### 🔐 Secure Authentication & Authorization  
+- **Admin Login**: Dedicated admin access via `AdminLogin.html`, secured with **Spring Security + BCryptPasswordEncoder**.  
+- **User Login & Registration**: Customers can self-register using mobile numbers & passwords via `UserLogin.html`.  
+- **Role-Based Access Control**: Differentiated access for **ADMIN** and **USER** roles.  
 
-Create (Add Item): Administrators can seamlessly add new items directly from the AdminDashboard.html interface, providing details like name, price, stock quantity, and an optional image.
-Read (View Items): All inventory items are fetched and displayed in a clear table on the admin dashboard, and also on the main index.html page for customers to browse.
-Update (Modify Item): (Implicitly supported through re-adding or future enhancement, though not explicitly shown in provided HTML for direct editing of existing items).
-Delete (Remove Item): Administrators have the ability to delete items from the inventory directly from the admin dashboard.
-Image Upload Functionality: The system supports uploading item images, which are stored locally in an uploads/ directory and served dynamically.
-Dynamic Shopping Cart and Order Processing:
+### 📦 Item & Inventory Management (CRUD)  
+- **Create**: Admins can add new items with details (name, price, stock, image).  
+- **Read**: Items displayed in **AdminDashboard.html** (for admins) and `index.html` (for customers).  
+- **Update**: Supports modifying existing items.  
+- **Delete**: Admins can remove items directly from the dashboard.  
+- **Image Uploads**: Item images stored in `/uploads` and served dynamically.  
 
-User-Specific Carts: Each user maintains a unique shopping cart, allowing them to add and remove items.
-Real-time Cart Updates: Cart contents are dynamically loaded and displayed, reflecting additions and removals.
-Bill Generation: Upon completing a purchase, the system generates a detailed bill, calculating the total based on items and quantities in the cart.
-PDF Bill Generation: Bills are generated as professional PDF documents using the iText library.
-Email Delivery: Customers can opt to receive their bills via email, with the PDF attached, facilitated by Spring Mail.
-Bill Download: Users also have the option to directly download their generated bills as PDF files.
-User and Customer Management (CRUD Operations):
+### 🛒 Shopping Cart & Order Processing  
+- **User-Specific Carts**: Each customer maintains their own shopping cart.  
+- **Real-time Updates**: Add/remove items with dynamic cart updates.  
+- **Bill Generation**: Calculates totals automatically.  
+- **PDF Invoice**: Bills generated using **iText**.  
+- **Email Delivery**: Bills sent via **Jakarta Mail** with PDF attached.  
+- **Download Option**: Users can download PDF bills directly.  
 
-Create (Register User): New users can register themselves through the UserLogin.html page.
-Read (View Users/Customers): (Implicitly supported for admin viewing, though not explicitly shown in provided HTML for a user list). User details are fetched for profile display and bill generation.
-Update (Edit Profile): Users can update their personal information (username, email) through a dedicated profile editing interface (profile.html and UserDashboard.html).
-Delete (Remove User): (Functionality exists in UserController.java but not explicitly exposed in the provided HTML for direct user deletion by admin).
-Modern and Responsive User Interface:
+### 👥 User & Customer Management (CRUD)  
+- **Register Users**: Customers sign up via `UserLogin.html`.  
+- **Profile Management**: Users can update details via `profile.html` & `UserDashboard.html`.  
+- **Admin Management**: Support for user/customer CRUD in backend controllers.  
 
-Tailwind CSS: The frontend is styled using Tailwind CSS, providing a clean, modern, and highly responsive design that adapts well to various screen sizes.
-Intuitive Navigation: Clear navigation across different sections like Home, Admin Dashboard, Cart, Checkout, and Help.
-Theme Switching: A simple theme switcher allows users to toggle between different color schemes (blue and green) for a personalized experience.
-Image Carousel: The homepage features an interactive image carousel to showcase promotions or featured products.
-Robust Backend Architecture:
+### 🎨 Modern UI & Experience  
+- **Tailwind CSS**: Responsive, modern design for all devices.  
+- **Theme Switcher**: Users can toggle between **blue** & **green** themes.  
+- **Image Carousel**: Interactive homepage carousel for promotions.  
+- **Intuitive Navigation**: Seamless movement across Home, Dashboard, Cart, Checkout, and Help.  
 
-Spring Boot: Provides a powerful and efficient framework for building the RESTful API endpoints.
-Spring Data MongoDB: Utilized for flexible and scalable NoSQL database operations, managing collections for items, users, carts, bills, orders, and customers.
-Global Exception Handling: A centralized GlobalExceptionHandler ensures graceful error handling for ResourceNotFoundException and other general exceptions, providing informative responses to the client.
-CORS Configuration: Properly configured Cross-Origin Resource Sharing (CORS) to allow frontend applications (e.g., running on localhost:8000) to interact with the backend API.
-This system provides a complete solution for managing a bookshop's billing and inventory, offering a seamless experience for both administrators and customers through well-defined CRUD operations across key entities.
+### ⚙️ Robust Backend Architecture  
+- **Spring Boot**: RESTful API backend.  
+- **Spring Data MongoDB**: NoSQL database for items, users, carts, bills & orders.  
+- **Global Exception Handling**: Managed via `GlobalExceptionHandler`.  
+- **CORS Configured**: Smooth frontend-backend integration.  
+
+---
+
+## 🛠️ Tech Stack  
+
+### 💻 Backend  
+- **Spring Boot** (REST APIs)  
+- **Spring Security** (Authentication & Authorization)  
+- **Spring Data MongoDB** (Database Operations)  
+- **iText** (PDF Generation)  
+- **Jakarta Mail** (Email Services)  
+- **Lombok** (Reduce Boilerplate Code)  
+
+### 🎨 Frontend  
+- **HTML5, CSS3**  
+- **Tailwind CSS** (Modern UI Framework)  
+- **JavaScript**  
+
+### 🗄️ Database  
+- **MongoDB** (NoSQL, scalable data storage)  
+
+---
+
+## 📸 Screenshots  
+
+👉 *You can add screenshots of your UI (Login Page, Dashboard, Cart, PDF Bill, etc.) here for better presentation.*  
+
+---
+
+## 🚀 How to Run the Project  
+
+1. **Clone the repository**  
+   ```bash
+   git clone https://github.com/your-username/pahana-edu-billing-system.git
+   cd pahana-edu-billing-system
