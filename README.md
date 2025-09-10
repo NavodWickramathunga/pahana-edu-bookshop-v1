@@ -67,7 +67,7 @@ A **full-stack billing system** designed for **Pahana Edu Bookshop**, combining 
 
 ## 📸 Screenshots  
 
-👉 *You can add screenshots of your UI (Login Page, Dashboard, Cart, PDF Bill, etc.) here for better presentation.*  
+👉 <img width="1339" height="583" alt="{34C5B82C-0B5F-4FE5-85A5-7F4740551630}" src="https://github.com/user-attachments/assets/2ed45cac-a34d-4d92-b39d-874e94bbb1fe" />
 
 ---
 
