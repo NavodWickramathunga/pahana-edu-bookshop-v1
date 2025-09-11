@@ -12,6 +12,7 @@ public class Item {
     private double price;
     private int stock;
     private String imageUrl;  // URL to the uploaded image
+    private String author;    // New field for author
 
     // Getters and setters
     public String getId() { return id; }
@@ -28,4 +29,7 @@ public class Item {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public String getAuthor() { return author; }
+    public void setAuthor(String author) { this.author = author; }
 }

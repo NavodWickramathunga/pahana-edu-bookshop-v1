@@ -47,4 +47,8 @@ public class ItemService {
 
         return "/uploads/" + filename;
     }
+
+    public void deleteItem(String id) {
+        itemRepository.deleteById(id);
+    }
 }
