@@ -1,780 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pahana Edu Bookshop - Admin Dashboard</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f7f7f7;
-      transition: background-color 0.3s ease;
-    }
-    :root {
-      --primary-color: #1a73e8;
-      --primary-light: #4c8be8;
-      --accent-color: #38a169;
-      --text-color: #2d3748;
-      --header-bg: #ffffff;
-      --nav-bg: #1a73e8;
-    }
-    .theme-green {
-      --primary-color: #38a169;
-      --primary-light: #48bb78;
-      --accent-color: #f6ad55;
-      --text-color: #2d3748;
-      --header-bg: #f0fdf4;
-      --nav-bg: #38a169;
-    }
-    .text-primary {
-      color: var(--primary-color);
-    }
-    .bg-primary {
-      background-color: var(--primary-color);
-    }
-    .bg-primary-light {
-      background-color: var(--primary-light);
-    }
-    .text-accent {
-      color: var(--accent-color);
-    }
-    .bg-accent {
-      background-color: var(--accent-color);
-    }
-    .bg-header {
-      background-color: var(--header-bg);
-    }
-    .bg-nav {
-      background-color: var(--nav-bg);
-    }
-    .transition-colors {
-      transition: color 0.3s ease, background-color 0.3s ease;
-    }
-    .sidebar {
-      width: 250px;
-      min-height: 100vh;
-      background-color: var(--nav-bg);
-      color: white;
-      transition: transform 0.3s ease;
-    }
-    .sidebar.hidden {
-      transform: translateX(-100%);
-    }
-    @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        z-index: 50;
-        transform: translateX(-100%);
-      }
-      .sidebar.active {
-        transform: translateX(0);
-      }
-    }
-    .content-section {
-      display: none;
-    }
-    .content-section.active {
-      display: block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .active { background-color: #4a5568; color: white; }
+        .banner-preview { max-width: 300px; height: auto; }
+    </style>
 </head>
-<body class="antialiased text-gray-800">
-  <div class="flex min-h-screen">
-    <aside id="sidebar" class="sidebar fixed md:static md:transform-none transition-colors">
-      <div class="p-4">
-        <h2 class="text-2xl font-bold text-white mb-6">Admin Dashboard</h2>
-        <ul class="space-y-2 font-medium">
-          <li>
-            <button id="manage-items-btn" class="block w-full text-left px-4 py-2 bg-primary-light rounded transition-colors">Manage Items</button>
-          </li>
-          <li>
-            <button id="view-orders-btn" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">View Orders</button>
-          </li>
-          <li>
-            <button id="user-management-btn" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">User Management</button>
-          </li>
-          <li>
-            <a href="index.html" class="block px-4 py-2 hover:bg-primary-light rounded transition-colors">Back to Home</a>
-          </li>
-          <li>
-            <button onclick="logout()" class="block w-full text-left px-4 py-2 hover:bg-primary-light rounded transition-colors">Logout</button>
-          </li>
-        </ul>
-      </div>
-    </aside>
-    <div class="flex-1 flex flex-col">
-      <header class="bg-header shadow-sm transition-colors">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div class="flex items-center space-x-4">
-            <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none" aria-label="Toggle navigation menu">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-              </svg>
-            </button>
-            <h1 class="text-2xl font-bold text-primary transition-colors">Pahana Edu Bookshop</h1>
-          </div>
-          <div class="flex items-center space-x-4">
-            <span class="text-gray-600 text-sm">Themes:</span>
-            <button id="theme-blue-btn" class="w-8 h-8 rounded-full bg-primary transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to blue theme"></button>
-            <button id="theme-green-btn" class="w-8 h-8 rounded-full bg-green-500 transition-colors border-2 border-transparent focus:border-gray-500" aria-label="Switch to green theme"></button>
-          </div>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white p-6">
+            <h2 class="text-2xl font-bold mb-6">Pahana Edu Bookshop</h2>
+            <nav>
+                <a href="#manage-items" class="block py-2 px-4 rounded hover:bg-gray-700 tab-link">Manage Items</a>
+                <a href="#view-orders" class="block py-2 px-4 rounded hover:bg-gray-700 tab-link">View Orders</a>
+                <a href="#user-management" class="block py-2 px-4 rounded hover:bg-gray-700 tab-link">User Management</a>
+                <a href="#banner-management" class="block py-2 px-4 rounded hover:bg-gray-700 tab-link">Banner Management</a>
+                <a href="/home" class="block py-2 px-4 rounded hover:bg-gray-700">Back to Home</a>
+                <a href="/logout" class="block py-2 px-4 rounded hover:bg-gray-700">Logout</a>
+            </nav>
+            <div class="mt-6">
+                <label for="theme" class="block text-sm">Themes:</label>
+                <select id="theme" class="mt-1 p-2 w-full bg-gray-700 rounded" aria-label="Select Theme">
+                    <option>Light</option>
+                    <option>Dark</option>
+                </select>
+            </div>
         </div>
-      </header>
-      <main class="container mx-auto px-4 py-8 flex-1">
-        <!-- Manage Items Section -->
-        <section id="manage-items" class="content-section active bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Add New Item</h2>
-          <form id="addItemForm" class="grid grid-cols-1 md:grid-cols-2 gap-4" enctype="multipart/form-data">
-            <div>
-              <label for="bannerImageUpload" class="block mb-2 font-medium text-gray-700">Select Banner Image:</label>
-              <input type="file" id="bannerImageUpload" accept="image/*" class="mb-4 p-2 border border-gray-300 rounded w-full" />
 
-              <label for="itemName" class="block text-sm font-medium text-gray-700">Item Name</label>
-              <input type="text" id="itemName" name="name" placeholder="Enter item name" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
+        <!-- Main Content -->
+        <div class="flex-1 p-6 overflow-auto">
+            <!-- Manage Items Section -->
+            <div id="manage-items" class="tab-content">
+                <h2 class="text-2xl font-bold mb-4">Manage Items</h2>
+                <div class="bg-white p-6 rounded shadow">
+                    <h3 class="text-xl font-semibold mb-4">Add New Item</h3>
+                    <form id="add-item-form">
+                        <div class="mb-4">
+                            <label for="item-name" class="block text-sm">Item Name</label>
+                            <input type="text" id="item-name" class="w-full p-2 border rounded" aria-label="Item Name" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="item-price" class="block text-sm">Item Price (LKR)</label>
+                            <input type="number" id="item-price" class="w-full p-2 border rounded" aria-label="Item Price in LKR" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="item-stock" class="block text-sm">Stock</label>
+                            <input type="number" id="item-stock" class="w-full p-2 border rounded" aria-label="Stock Quantity" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="item-author" class="block text-sm">Author</label>
+                            <input type="text" id="item-author" class="w-full p-2 border rounded" aria-label="Author Name" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="item-image" class="block text-sm">Item Image</label>
+                            <input type="file" id="item-image" accept="image/*" class="w-full p-2 border rounded" aria-label="Upload Item Image">
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Item</button>
+                    </form>
+                    <div id="recent-items" class="mt-6">
+                        <h3 class="text-lg font-semibold mb-2">Recently Added Items</h3>
+                        <table class="w-full border">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="p-2">Item Name</th>
+                                    <th class="p-2">Price (LKR)</th>
+                                    <th class="p-2">Stock</th>
+                                    <th class="p-2">Author</th>
+                                    <th class="p-2">Image</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-items-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded shadow mt-6">
+                    <h3 class="text-xl font-semibold mb-4">Inventory</h3>
+                    <table class="w-full border">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="p-2">Item Name</th>
+                                <th class="p-2">Price (LKR)</th>
+                                <th class="p-2">Stock</th>
+                                <th class="p-2">Author</th>
+                                <th class="p-2">Image</th>
+                                <th class="p-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table"></tbody>
+                    </table>
+                </div>
             </div>
-            <div>
-              <label for="itemPrice" class="block text-sm font-medium text-gray-700">Item Price (LKR)</label>
-              <input type="number" id="itemPrice" name="price" placeholder="Enter price" required min="0" step="0.01" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
-            </div>
-            <div>
-              <label for="itemStock" class="block text-sm font-medium text-gray-700">Stock</label>
-              <input type="number" id="itemStock" name="stock" placeholder="Enter stock quantity" required min="0" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
-            </div>
-            <div>
-              <label for="itemAuthor" class="block text-sm font-medium text-gray-700">Author</label>
-              <input type="text" id="itemAuthor" name="author" placeholder="Enter author name" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
-            </div>
-            <div>
-              <label for="itemImage" class="block text-sm font-medium text-gray-700">Item Image</label>
-              <input type="file" id="itemImage" name="image" accept="image/*" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
-            </div>
-            <div class="md:col-span-2">
-              <button type="submit" class="w-full md:w-auto bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Add Item</button>
-            </div>
-          </form>
-          <h2 class="text-xl font-semibold mt-8 mb-4 text-primary transition-colors">Inventory</h2>
-          <div class="overflow-x-auto">
-            <table id="itemsTable" class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price (LKR)</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="itemsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-            </table>
-          </div>
-        </section>
 
-        <!-- View Orders Section -->
-        <section id="view-orders" class="content-section bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Order Management</h2>
-          <div class="mb-4 flex flex-wrap gap-2">
-            <button id="filter-all-orders" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-light transition-colors">All Orders</button>
-            <button id="filter-pending-orders" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors">Pending</button>
-            <button id="filter-completed-orders" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">Completed</button>
-            <button id="filter-cancelled-orders" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">Cancelled</button>
-          </div>
-          <div class="overflow-x-auto">
-            <table id="ordersTable" class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (LKR)</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="ordersTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-            </table>
-          </div>
-        </section>
+            <!-- View Orders Section -->
+            <div id="view-orders" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-4">Order Management</h2>
+                <div class="bg-white p-6 rounded shadow">
+                    <div class="mb-4">
+                        <button class="px-4 py-2 bg-gray-200 rounded filter-btn" data-filter="all">All Orders</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded filter-btn" data-filter="pending">Pending</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded filter-btn" data-filter="completed">Completed</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded filter-btn" data-filter="cancelled">Cancelled</button>
+                    </div>
+                    <table class="w-full border">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="p-2">Order ID</th>
+                                <th class="p-2">Customer</th>
+                                <th class="p-2">Total (LKR)</th>
+                                <th class="p-2">Status</th>
+                                <th class="p-2">Date</th>
+                                <th class="p-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table"></tbody>
+                    </table>
+                </div>
+            </div>
 
-        <section id="banner-upload" class="bg-white p-6 rounded-lg shadow-md mb-8">
-  <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Upload Banner Image (Resized to 1200x400)</h2>
-  <input type="file" id="bannerImageUpload" accept="image/*" class="mb-4 p-2 border border-gray-300 rounded w-full" />
-  <button id="uploadAndResizeBtn" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-light transition-colors">Upload & Resize</button>
-  <p id="uploadStatus" class="mt-2"></p>
-</section>
+            <!-- User Management Section -->
+            <div id="user-management" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-4">User Management</h2>
+                <div class="bg-white p-6 rounded shadow">
+                    <h3 class="text-xl font-semibold mb-4">Add New User</h3>
+                    <form id="add-user-form">
+                        <div class="mb-4">
+                            <label for="user-username" class="block text-sm">Username</label>
+                            <input type="text" id="user-username" class="w-full p-2 border rounded" aria-label="Username" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="user-email" class="block text-sm">Email</label>
+                            <input type="email" id="user-email" class="w-full p-2 border rounded" aria-label="Email Address" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="user-password" class="block text-sm">Password</label>
+                            <input type="password" id="user-password" class="w-full p-2 border rounded" aria-label="Password" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="user-role" class="block text-sm">Role</label>
+                            <select id="user-role" class="w-full p-2 border rounded" aria-label="User Role" required>
+                                <option value="">Select Role</option>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add User</button>
+                    </form>
+                    <div class="mt-6">
+                        <h3 class="text-lg font-semibold mb-2">User List</h3>
+                        <table class="w-full border">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="p-2">ID</th>
+                                    <th class="p-2">Username</th>
+                                    <th class="p-2">Email</th>
+                                    <th class="p-2">Role</th>
+                                    <th class="p-2">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-        <!-- User Management Section -->
-        <section id="user-management" class="content-section bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Add New User</h2>
-          <form id="addUserForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div>
-              <label for="userName" class="block text-sm font-medium text-gray-700">Username</label>
-              <input type="text" id="userName" name="username" placeholder="Enter username" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
+            <!-- Banner Management Section -->
+            <div id="banner-management" class="tab-content hidden">
+                <h2 class="text-2xl font-bold mb-4">Banner Management</h2>
+                <div class="bg-white p-6 rounded shadow">
+                    <h3 class="text-xl font-semibold mb-4">Current Banner</h3>
+                    <img id="current-banner" src="" alt="Current Banner" class="banner-preview mb-4">
+                    <p class="text-sm mb-4">Banner displays at 1200x400 (3:1). Important content should be centered.</p>
+                    <h3 class="text-xl font-semibold mb-4">Upload Banner Image (Resized to 1200x400)</h3>
+                    <form id="banner-form">
+                        <div class="mb-4">
+                            <label for="banner-image" class="block text-sm">Select Banner Image:</label>
+                            <input type="file" id="banner-image" accept="image/*" class="w-full p-2 border rounded" aria-label="Upload Banner Image">
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Upload & Resize</button>
+                    </form>
+                </div>
             </div>
-            <div>
-              <label for="userEmail" class="block text-sm font-medium text-gray-700">Email</label>
-              <input type="email" id="userEmail" name="email" placeholder="Enter email" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
-            </div>
-            <div>
-              <label for="userPassword" class="block text-sm font-medium text-gray-700">Password</label>
-              <input type="password" id="userPassword" name="password" placeholder="Enter password" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
-            </div>
-            <div>
-              <label for="userRole" class="block text-sm font-medium text-gray-700">Role</label>
-              <select id="userRole" name="role" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors">
-                <option value="">Select Role</option>
-                <option value="USER">User</option>
-                <option value="ADMIN">Admin</option>
-              </select>
-            </div>
-            <div class="md:col-span-2">
-              <button type="submit" class="w-full md:w-auto bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Add User</button>
-            </div>
-          </form>
-          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">User List</h2>
-          <div class="overflow-x-auto">
-            <table id="usersTable" class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200"></tbody>
-            </table>
-          </div>
-        </section>
-      </main>
-      <footer class="bg-gray-800 text-white py-4 mt-8">
-        <div class="container mx-auto px-4 text-center">
-          <p>&copy; 2024 My Bookshop. All rights reserved.</p>
+
+            <!-- Footer -->
+            <footer class="mt-6 text-center">
+                <p>© 2024 My Bookshop. All rights reserved.</p>
+            </footer>
         </div>
-      </footer>
     </div>
-    <div id="message-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
-      <div class="bg-white p-6 rounded-lg shadow-xl text-center">
-        <p id="modal-message" class="text-lg font-semibold mb-4"></p>
-        <button id="close-modal-btn" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Close</button>
-      </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded shadow">
+            <h3 class="text-lg font-semibold mb-4">Confirmation</h3>
+            <p id="modal-message"></p>
+            <div class="mt-4 flex justify-end">
+                <button id="modal-close" class="px-4 py-2 bg-gray-500 text-white rounded">Close</button>
+            </div>
+        </div>
     </div>
-  </div>
-  <script>
-    // Theme switcher
-    const body = document.body;
-    const blueThemeBtn = document.getElementById('theme-blue-btn');
-    const greenThemeBtn = document.getElementById('theme-green-btn');
 
-    function applyTheme(theme) {
-      body.classList.remove('theme-green');
-      if (theme === 'green') body.classList.add('theme-green');
-      localStorage.setItem('theme', theme);
-    }
+    <script>
+        // Tab Navigation
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-    const savedTheme = localStorage.getItem('theme') || 'blue';
-    applyTheme(savedTheme);
-
-    blueThemeBtn.addEventListener('click', () => applyTheme('blue'));
-    greenThemeBtn.addEventListener('click', () => applyTheme('green'));
-
-    // Mobile sidebar toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const sidebar = document.getElementById('sidebar');
-    mobileMenuBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
-
-    // Modal for messages
-    const modal = document.getElementById('message-modal');
-    const modalMessage = document.getElementById('modal-message');
-    const closeModalBtn = document.getElementById('close-modal-btn');
-
-    function showMessage(message) {
-      modalMessage.textContent = message;
-      modal.classList.remove('hidden');
-    }
-
-    closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
-
-    // Section toggling
-    const sections = document.querySelectorAll('.content-section');
-    const navButtons = document.querySelectorAll('#sidebar button[id$="-btn"]');
-
-    function showSection(sectionId) {
-      sections.forEach(section => section.classList.remove('active'));
-      const targetSection = document.getElementById(sectionId);
-      if (targetSection) {
-        targetSection.classList.add('active');
-      } else {
-        console.error(`Section with id '${sectionId}' not found`);
-        return;
-      }
-      
-      navButtons.forEach(btn => btn.classList.remove('bg-primary-light'));
-      const targetButton = document.getElementById(`${sectionId}-btn`);
-      if (targetButton) {
-        targetButton.classList.add('bg-primary-light');
-      }
-
-      // Load data based on active section
-      if (sectionId === 'manage-items') fetchItems();
-      if (sectionId === 'view-orders') fetchOrders();
-      if (sectionId === 'user-management') fetchUsers();
-    }
-
-    navButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const sectionId = button.id.replace('-btn', '');
-        showSection(sectionId);
-      });
-    });
-
-    // Logout function
-    function logout() {
-      fetch("http://localhost:8080/logout", { method: "POST", credentials: 'include' })
-        .then(() => window.location.href = "index.html")
-        .catch(error => showMessage(`Error logging out: ${error.message}`));
-    }
-
-    // Fetch and display items with image and author support
-    async function fetchItems() {
-      try {
-        const response = await fetch('http://localhost:8080/api/items', { // Use full URL
-          method: 'GET',
-          credentials: 'include'
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                tabLinks.forEach(l => l.classList.remove('active'));
+                tabContents.forEach(c => c.classList.add('hidden'));
+                link.classList.add('active');
+                document.querySelector(link.getAttribute('href')).classList.remove('hidden');
+            });
         });
 
-        // Check content type before parsing JSON
-        const contentType = response.headers.get('content-type');
-        if (!response.ok) {
-          const errorText = await response.text(); // Get response text for better error message
-          throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}. Response: ${errorText.substring(0, 200)}`);
-        }
-        if (!contentType || !contentType.includes('application/json')) {
-          const text = await response.text();
-          throw new Error('Expected JSON but got: ' + text.substring(0, 100) + '... (Full response not JSON)');
-        }
+        // Mock Data Storage
+        let items = [];
+        let orders = [];
+        let users = [];
 
-        const items = await response.json();
-        const itemsTableBody = document.getElementById('itemsTableBody');
-        itemsTableBody.innerHTML = ''; // Clear existing items
-
-        if (items.length === 0) {
-          itemsTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">No items found.</td></tr>';
-          return;
-        }
-
-        items.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.name}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(item.price).toFixed(2)}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.stock}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.author || 'Unknown Author'}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-              ${item.imageUrl ? `<img src="http://localhost:8080${item.imageUrl}" alt="${item.name}" class="h-12 w-12 object-cover rounded" />` : 'No Image'}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-              <button onclick="deleteItem('${item.id}')" class="text-red-600 hover:text-red-800">Delete</button>
-            </td>
-          `;
-          itemsTableBody.appendChild(row);
-        });
-      } catch (error) {
-        showMessage(`Error fetching items: ${error.message}`);
-        console.error("Detailed error fetching items:", error);
-      }
-    }
-
-    // Add new item with image and author upload
-    const addItemForm = document.getElementById('addItemForm');
-    addItemForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(addItemForm);
-
-      try {
-        const response = await fetch('http://localhost:8080/api/items', { // Use full URL
-          method: 'POST',
-          body: formData,
-          credentials: 'include'
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || 'Failed to add item');
-        }
-
-        const data = await response.json();
-        showMessage(`Item "${data.name}" added successfully!`);
-        addItemForm.reset();
-        fetchItems(); // Refresh the list after adding
-      } catch (error) {
-        showMessage(`Error adding item: ${error.message}`);
-      }
-    });
-
-    // Delete item
-    async function deleteItem(itemId) {
-      if (!confirm('Are you sure you want to delete this item?')) return;
-      try {
-        const response = await fetch(`http://localhost:8080/api/items/${itemId}`, { // Use full URL
-          method: 'DELETE',
-          credentials: 'include'
-        });
-        if (!response.ok) throw new Error('Failed to delete item');
-        showMessage('Item deleted successfully!');
-        fetchItems(); // Refresh the list after deleting
-      } catch (error) {
-        showMessage(`Error deleting item: ${error.message}`);
-      }
-    }
-
-    // Fetch and display orders
-    async function fetchOrders(statusFilter = null) {
-      try {
-        let url = 'http://localhost:8080/api/orders';
-        if (statusFilter) {
-          url += `?status=${statusFilter}`;
-        }
-        
-        const response = await fetch(url, {
-          method: 'GET',
-          credentials: 'include'
-        });
-
-        const contentType = response.headers.get('content-type');
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Failed to fetch orders: ${response.status} ${response.statusText}. Response: ${errorText.substring(0, 200)}`);
-        }
-        if (!contentType || !contentType.includes('application/json')) {
-          const text = await response.text();
-          throw new Error('Expected JSON but got: ' + text.substring(0, 100) + '... (Full response not JSON)');
-        }
-
-        const orders = await response.json();
-        const ordersTableBody = document.getElementById('ordersTableBody');
-        ordersTableBody.innerHTML = '';
-
-        if (orders.length === 0) {
-          ordersTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">No orders found.</td></tr>';
-          return;
-        }
-
-        orders.forEach(order => {
-          const row = document.createElement('tr');
-          const statusColor = getStatusColor(order.status);
-          const orderDate = new Date(order.createdAt || order.orderDate || Date.now()).toLocaleDateString();
-          
-          row.innerHTML = `
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#${order.id}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.customerName || order.customer?.username || 'Unknown'}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(order.totalAmount || order.total || 0).toFixed(2)}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
-                ${order.status || 'PENDING'}
-              </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${orderDate}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-              <select onchange="updateOrderStatus('${order.id}', this.value)" class="text-sm border border-gray-300 rounded px-2 py-1">
-                <option value="PENDING" ${order.status === 'PENDING' ? 'selected' : ''}>Pending</option>
-                <option value="COMPLETED" ${order.status === 'COMPLETED' ? 'selected' : ''}>Completed</option>
-                <option value="CANCELLED" ${order.status === 'CANCELLED' ? 'selected' : ''}>Cancelled</option>
-              </select>
-              <button onclick="viewOrderDetails('${order.id}')" class="ml-2 text-blue-600 hover:text-blue-800">View</button>
-            </td>
-          `;
-          ordersTableBody.appendChild(row);
-        });
-      } catch (error) {
-        showMessage(`Error fetching orders: ${error.message}`);
-        console.error("Detailed error fetching orders:", error);
-      }
-    }
-
-    // Helper function to get status color classes
-    function getStatusColor(status) {
-      switch (status?.toUpperCase()) {
-        case 'COMPLETED':
-          return 'bg-green-100 text-green-800';
-        case 'CANCELLED':
-          return 'bg-red-100 text-red-800';
-        case 'PENDING':
-        default:
-          return 'bg-yellow-100 text-yellow-800';
-      }
-    }
-
-    // Update order status
-    async function updateOrderStatus(orderId, newStatus) {
-      try {
-        const response = await fetch(`http://localhost:8080/api/orders/${orderId}/status`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ status: newStatus }),
-          credentials: 'include'
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || 'Failed to update order status');
-        }
-
-        showMessage(`Order #${orderId} status updated to ${newStatus}`);
-        fetchOrders(); // Refresh the orders list
-      } catch (error) {
-        showMessage(`Error updating order status: ${error.message}`);
-        fetchOrders(); // Refresh to revert the select change
-      }
-    }
-
-    // View order details (placeholder - can be expanded)
-    function viewOrderDetails(orderId) {
-      showMessage(`Order details for #${orderId} - Feature coming soon!`);
-    }
-
-    // Order filter event listeners
-    document.addEventListener('DOMContentLoaded', () => {
-      const filterButtons = [
-        { id: 'filter-all-orders', status: null },
-        { id: 'filter-pending-orders', status: 'PENDING' },
-        { id: 'filter-completed-orders', status: 'COMPLETED' },
-        { id: 'filter-cancelled-orders', status: 'CANCELLED' }
-      ];
-
-      filterButtons.forEach(({ id, status }) => {
-        const button = document.getElementById(id);
-        if (button) {
-          button.addEventListener('click', () => fetchOrders(status));
-        }
-      });
-    });
-
-    // Fetch and display users
-    async function fetchUsers() {
-      try {
-        const response = await fetch('http://localhost:8080/api/users', {
-          method: 'GET',
-          credentials: 'include'
-        });
-
-        const contentType = response.headers.get('content-type');
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}. Response: ${errorText.substring(0, 200)}`);
-        }
-        if (!contentType || !contentType.includes('application/json')) {
-          const text = await response.text();
-          throw new Error('Expected JSON but got: ' + text.substring(0, 100) + '... (Full response not JSON)');
-        }
-
-        const users = await response.json();
-        const usersTableBody = document.getElementById('usersTableBody');
-        usersTableBody.innerHTML = '';
-
-        if (users.length === 0) {
-          usersTableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">No users found.</td></tr>';
-          return;
-        }
-
-        users.forEach(user => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.id}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.username}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.email}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
-                ${user.role || 'USER'}
-              </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-              <button onclick="editUser('${user.id}')" class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
-              <button onclick="deleteUser('${user.id}')" class="text-red-600 hover:text-red-800">Delete</button>
-            </td>
-          `;
-          usersTableBody.appendChild(row);
-        });
-      } catch (error) {
-        showMessage(`Error fetching users: ${error.message}`);
-        console.error("Detailed error fetching users:", error);
-      }
-    }
-
-    // Add new user
-    const addUserForm = document.getElementById('addUserForm');
-    if (addUserForm) {
-      addUserForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(addUserForm);
-        const userData = {
-          username: formData.get('username'),
-          email: formData.get('email'),
-          password: formData.get('password'),
-          role: formData.get('role')
-        };
-
-        try {
-          const response = await fetch('http://localhost:8080/api/users', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-            credentials: 'include'
-          });
-
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || 'Failed to add user');
-          }
-
-          const data = await response.json();
-          showMessage(`User "${data.username}" added successfully!`);
-          addUserForm.reset();
-          fetchUsers(); // Refresh the users list
-        } catch (error) {
-          showMessage(`Error adding user: ${error.message}`);
-        }
-      });
-    }
-
-    // Edit user (placeholder - can be expanded with a modal)
-    function editUser(userId) {
-      showMessage(`Edit user functionality for user ID: ${userId} - Feature coming soon!`);
-    }
-
-    // Delete user
-    async function deleteUser(userId) {
-      if (!confirm('Are you sure you want to delete this user?')) return;
-      
-      try {
-        const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
-          method: 'DELETE',
-          credentials: 'include'
-        });
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || 'Failed to delete user');
-        }
-        
-        showMessage('User deleted successfully!');
-        fetchUsers(); // Refresh the users list
-      } catch (error) {
-        showMessage(`Error deleting user: ${error.message}`);
-      }
-    }
-
-    // Initialize: Show 'Manage Items' section and fetch items on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      showSection('manage-items');
-      // fetchItems() is already called by showSection('manage-items')
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-    const bannerImageUpload = document.getElementById('bannerImageUpload');
-    const uploadAndResizeBtn = document.getElementById('uploadAndResizeBtn');
-    const uploadStatus = document.getElementById('uploadStatus');
-
-    // Client-side resize parameters
-    const TARGET_WIDTH = 1200;
-    const TARGET_HEIGHT = 400;
-
-    uploadAndResizeBtn.addEventListener('click', () => {
-        const file = bannerImageUpload.files[0];
-        if (!file) {
-            uploadStatus.textContent = 'Please select an image file.';
-            uploadStatus.className = 'text-red-600';
-            return;
-        }
-
-        // Use FileReader and Canvas to resize image client-side
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-                // Create canvas for resizing
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                canvas.width = TARGET_WIDTH;
-                canvas.height = TARGET_HEIGHT;
-
-                // Calculate cropping for center crop to maintain aspect ratio
-                const imgAspect = img.width / img.height;
-                const targetAspect = TARGET_WIDTH / TARGET_HEIGHT;
-
-                let sx, sy, sWidth, sHeight;
-
-                if (imgAspect > targetAspect) {
-                    // Image wider than target aspect ratio
-                    sHeight = img.height;
-                    sWidth = sHeight * targetAspect;
-                    sx = (img.width - sWidth) / 2;
-                    sy = 0;
-                } else {
-                    // Image taller than target aspect ratio
-                    sWidth = img.width;
-                    sHeight = sWidth / targetAspect;
-                    sx = 0;
-                    sy = (img.height - sHeight) / 2;
-                }
-
-                ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
-
-                // Convert canvas to blob and upload
-                canvas.toBlob(async (blob) => {
-                    if (!blob) {
-                        uploadStatus.textContent = 'Failed to resize image.';
-                        uploadStatus.className = 'text-red-600';
-                        return;
-                    }
-
-                    const formData = new FormData();
-                    formData.append('bannerImage', blob, file.name);
-
-                    try {
-                        uploadStatus.textContent = 'Uploading...';
-                        uploadStatus.className = 'text-blue-600';
-
-                        const response = await fetch('/api/upload-banner', {
-                            method: 'POST',
-                            body: formData,
-                            credentials: 'include'
-                        });
-
-                        if (!response.ok) {
-                            const errorData = await response.json();
-                            throw new Error(errorData.message || 'Upload failed');
-                        }
-
-                        const data = await response.json();
-                        uploadStatus.textContent = 'Upload successful! Image URL: ' + data.imageUrl;
-                        uploadStatus.className = 'text-green-600';
-
-                        // Optionally, update carousel or banner preview here
-                    } catch (error) {
-                        uploadStatus.textContent = 'Upload failed: ' + error.message;
-                        uploadStatus.className = 'text-red-600';
-                    }
-                }, 'image/jpeg', 0.9);
+        // Add Item
+        document.getElementById('add-item-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const item = {
+                id: items.length + 1,
+                name: document.getElementById('item-name').value,
+                price: parseFloat(document.getElementById('item-price').value),
+                stock: parseInt(document.getElementById('item-stock').value),
+                author: document.getElementById('item-author').value,
+                image: document.getElementById('item-image').files[0] ? URL.createObjectURL(document.getElementById('item-image').files[0]) : ''
             };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-});
+            items.push(item);
+            updateInventoryTable();
+            updateRecentItemsTable();
+            document.getElementById('add-item-form').reset();
+            showModal('Item added successfully!');
+        });
 
-  </script>
+        // Update Inventory Table
+        function updateInventoryTable() {
+            const tableBody = document.getElementById('inventory-table');
+            tableBody.innerHTML = '';
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="p-2">${item.name}</td>
+                    <td class="p-2">${item.price}</td>
+                    <td class="p-2">${item.stock}</td>
+                    <td class="p-2">${item.author}</td>
+                    <td class="p-2"><img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover"></td>
+                    <td class="p-2">
+                        <button class="bg-red-500 text-white px-2 py-1 rounded delete-item" data-id="${item.id}">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Add Delete Item Event Listeners
+            document.querySelectorAll('.delete-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    items = items.filter(item => item.id !== id);
+                    updateInventoryTable();
+                    updateRecentItemsTable();
+                    showModal('Item deleted successfully!');
+                });
+            });
+        }
+
+        // Update Recent Items Table
+        function updateRecentItemsTable() {
+            const tableBody = document.getElementById('recent-items-table');
+            tableBody.innerHTML = '';
+            items.slice(-3).forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="p-2">${item.name}</td>
+                    <td class="p-2">${item.price}</td>
+                    <td class="p-2">${item.stock}</td>
+                    <td class="p-2">${item.author}</td>
+                    <td class="p-2"><img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover"></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Add User
+        document.getElementById('add-user-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = {
+                id: users.length + 1,
+                username: document.getElementById('user-username').value,
+                email: document.getElementById('user-email').value,
+                role: document.getElementById('user-role').value
+            };
+            users.push(user);
+            updateUsersTable();
+            document.getElementById('add-user-form').reset();
+            showModal('User added successfully!');
+        });
+
+        // Update Users Table
+        function updateUsersTable() {
+            const tableBody = document.getElementById('users-table');
+            tableBody.innerHTML = '';
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="p-2">${user.id}</td>
+                    <td class="p-2">${user.username}</td>
+                    <td class="p-2">${user.email}</td>
+                    <td class="p-2">${user.role}</td>
+                    <td class="p-2">
+                        <button class="bg-red-500 text-white px-2 py-1 rounded delete-user" data-id="${user.id}">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Add Delete User Event Listeners
+            document.querySelectorAll('.delete-user').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    users = users.filter(user => user.id !== id);
+                    updateUsersTable();
+                    showModal('User deleted successfully!');
+                });
+            });
+        }
+
+        // Banner Upload
+        document.getElementById('banner-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const bannerImage = document.getElementById('banner-image').files[0];
+            if (bannerImage) {
+                const img = new Image();
+                img.src = URL.createObjectURL(bannerImage);
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 1200;
+                    canvas.height = 400;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 1200, 400);
+                    document.getElementById('current-banner').src = canvas.toDataURL();
+                    showModal('Banner uploaded successfully!');
+                };
+            }
+        });
+
+        // Modal
+        function showModal(message) {
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal-close').addEventListener('click', () => {
+                document.getElementById('modal').classList.add('hidden');
+            });
+        }
+
+        // Initialize
+        document.querySelector('.tab-link').click();
+    </script>
 </body>
 </html>

@@ -1,42 +1,45 @@
 package com.pahanaedu.billingsystem.service;
 
-import net.coobird.thumbnailator.Thumbnails;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
+
 @Service
 public class ImageService {
 
-    private final String uploadDir = "uploads/";
+    private static final String UPLOAD_DIR = "uploads";
 
-    /**
-     * Resize the image to targetWidth x targetHeight and save it to uploads folder.
-     * Returns the relative URL path to the saved image.
-     */
+    // Resizes to target size using a center-crop cover strategy and saves as JPEG
     public String resizeAndSaveImage(MultipartFile file, int targetWidth, int targetHeight) throws IOException {
-        // Ensure upload directory exists
-        File uploadPath = new File(uploadDir);
-        if (!uploadPath.exists()) {
-            uploadPath.mkdirs();
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Empty image file.");
         }
 
-        // Generate unique filename with .jpg extension
-        String filename = UUID.randomUUID().toString() + ".jpg";
+        File uploadPath = new File(UPLOAD_DIR);
+        if (!uploadPath.exists()) {
+            boolean created = uploadPath.mkdirs();
+            if (!created) {
+                throw new IOException("Unable to create upload directory.");
+            }
+        }
+
+        String filename = "banner-" + UUID.randomUUID() + ".jpg";
         File destFile = new File(uploadPath, filename);
 
-        // Use Thumbnailator to resize and save as JPEG
         Thumbnails.of(file.getInputStream())
                 .size(targetWidth, targetHeight)
-                .crop(net.coobird.thumbnailator.geometry.Positions.CENTER) // Crop center to maintain aspect ratio
+                .crop(Positions.CENTER)      // center-crop to maintain aspect ratio
                 .outputFormat("jpg")
                 .outputQuality(0.9)
                 .toFile(destFile);
 
-        // Return URL path accessible by frontend
+        // Return web-accessible URL (served via WebConfig mapping /uploads/**)
         return "/uploads/" + filename;
     }
 }
