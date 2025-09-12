@@ -11,8 +11,8 @@ public class Item {
     private String name;
     private double price;
     private int stock;
-    private String imageUrl;  // URL to the uploaded image
-    private String author;    // New field for author
+    private String imageUrl;
+    private String author;
 
     // Getters and setters
     public String getId() { return id; }

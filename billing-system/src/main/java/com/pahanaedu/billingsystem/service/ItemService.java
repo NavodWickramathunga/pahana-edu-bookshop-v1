@@ -28,7 +28,6 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    // Save image file and return URL path
     public String saveImageAndGetUrl(MultipartFile imageFile) throws IOException {
         File uploadPath = new File(uploadDir);
         if (!uploadPath.exists()) {

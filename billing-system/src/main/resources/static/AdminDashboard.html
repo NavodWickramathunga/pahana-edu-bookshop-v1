@@ -125,10 +125,14 @@
         </div>
       </header>
       <main class="container mx-auto px-4 py-8 flex-1">
+        <!-- Manage Items Section -->
         <section id="manage-items" class="content-section active bg-white p-6 rounded-lg shadow-md mb-8">
           <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Add New Item</h2>
           <form id="addItemForm" class="grid grid-cols-1 md:grid-cols-2 gap-4" enctype="multipart/form-data">
             <div>
+              <label for="bannerImageUpload" class="block mb-2 font-medium text-gray-700">Select Banner Image:</label>
+              <input type="file" id="bannerImageUpload" accept="image/*" class="mb-4 p-2 border border-gray-300 rounded w-full" />
+
               <label for="itemName" class="block text-sm font-medium text-gray-700">Item Name</label>
               <input type="text" id="itemName" name="name" placeholder="Enter item name" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
             </div>
@@ -166,6 +170,84 @@
                 </tr>
               </thead>
               <tbody id="itemsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- View Orders Section -->
+        <section id="view-orders" class="content-section bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Order Management</h2>
+          <div class="mb-4 flex flex-wrap gap-2">
+            <button id="filter-all-orders" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-light transition-colors">All Orders</button>
+            <button id="filter-pending-orders" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors">Pending</button>
+            <button id="filter-completed-orders" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">Completed</button>
+            <button id="filter-cancelled-orders" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">Cancelled</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table id="ordersTable" class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (LKR)</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="banner-upload" class="bg-white p-6 rounded-lg shadow-md mb-8">
+  <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Upload Banner Image (Resized to 1200x400)</h2>
+  <input type="file" id="bannerImageUpload" accept="image/*" class="mb-4 p-2 border border-gray-300 rounded w-full" />
+  <button id="uploadAndResizeBtn" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-light transition-colors">Upload & Resize</button>
+  <p id="uploadStatus" class="mt-2"></p>
+</section>
+
+        <!-- User Management Section -->
+        <section id="user-management" class="content-section bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">Add New User</h2>
+          <form id="addUserForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div>
+              <label for="userName" class="block text-sm font-medium text-gray-700">Username</label>
+              <input type="text" id="userName" name="username" placeholder="Enter username" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
+            </div>
+            <div>
+              <label for="userEmail" class="block text-sm font-medium text-gray-700">Email</label>
+              <input type="email" id="userEmail" name="email" placeholder="Enter email" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
+            </div>
+            <div>
+              <label for="userPassword" class="block text-sm font-medium text-gray-700">Password</label>
+              <input type="password" id="userPassword" name="password" placeholder="Enter password" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors" />
+            </div>
+            <div>
+              <label for="userRole" class="block text-sm font-medium text-gray-700">Role</label>
+              <select id="userRole" name="role" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary transition-colors">
+                <option value="">Select Role</option>
+                <option value="USER">User</option>
+                <option value="ADMIN">Admin</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <button type="submit" class="w-full md:w-auto bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-light transition-colors">Add User</button>
+            </div>
+          </form>
+          <h2 class="text-xl font-semibold mb-4 text-primary transition-colors">User List</h2>
+          <div class="overflow-x-auto">
+            <table id="usersTable" class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200"></tbody>
             </table>
           </div>
         </section>
@@ -224,10 +306,21 @@
 
     function showSection(sectionId) {
       sections.forEach(section => section.classList.remove('active'));
-      document.getElementById(sectionId).classList.add('active');
+      const targetSection = document.getElementById(sectionId);
+      if (targetSection) {
+        targetSection.classList.add('active');
+      } else {
+        console.error(`Section with id '${sectionId}' not found`);
+        return;
+      }
+      
       navButtons.forEach(btn => btn.classList.remove('bg-primary-light'));
-      document.getElementById(`${sectionId}-btn`).classList.add('bg-primary-light');
+      const targetButton = document.getElementById(`${sectionId}-btn`);
+      if (targetButton) {
+        targetButton.classList.add('bg-primary-light');
+      }
 
+      // Load data based on active section
       if (sectionId === 'manage-items') fetchItems();
       if (sectionId === 'view-orders') fetchOrders();
       if (sectionId === 'user-management') fetchUsers();
@@ -250,15 +343,25 @@
     // Fetch and display items with image and author support
     async function fetchItems() {
       try {
-        const response = await fetch('http://localhost:8080/api/items', {
+        const response = await fetch('http://localhost:8080/api/items', { // Use full URL
           method: 'GET',
           credentials: 'include'
         });
-        if (!response.ok) throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}`);
+
+        // Check content type before parsing JSON
+        const contentType = response.headers.get('content-type');
+        if (!response.ok) {
+          const errorText = await response.text(); // Get response text for better error message
+          throw new Error(`Failed to fetch items: ${response.status} ${response.statusText}. Response: ${errorText.substring(0, 200)}`);
+        }
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          throw new Error('Expected JSON but got: ' + text.substring(0, 100) + '... (Full response not JSON)');
+        }
 
         const items = await response.json();
         const itemsTableBody = document.getElementById('itemsTableBody');
-        itemsTableBody.innerHTML = '';
+        itemsTableBody.innerHTML = ''; // Clear existing items
 
         if (items.length === 0) {
           itemsTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">No items found.</td></tr>';
@@ -273,7 +376,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.stock}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.author || 'Unknown Author'}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm">
-              ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name}" class="h-12 w-12 object-cover rounded" />` : 'No Image'}
+              ${item.imageUrl ? `<img src="http://localhost:8080${item.imageUrl}" alt="${item.name}" class="h-12 w-12 object-cover rounded" />` : 'No Image'}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <button onclick="deleteItem('${item.id}')" class="text-red-600 hover:text-red-800">Delete</button>
@@ -295,7 +398,7 @@
       const formData = new FormData(addItemForm);
 
       try {
-        const response = await fetch('http://localhost:8080/api/items', {
+        const response = await fetch('http://localhost:8080/api/items', { // Use full URL
           method: 'POST',
           body: formData,
           credentials: 'include'
@@ -309,7 +412,7 @@
         const data = await response.json();
         showMessage(`Item "${data.name}" added successfully!`);
         addItemForm.reset();
-        fetchItems();
+        fetchItems(); // Refresh the list after adding
       } catch (error) {
         showMessage(`Error adding item: ${error.message}`);
       }
@@ -319,23 +422,359 @@
     async function deleteItem(itemId) {
       if (!confirm('Are you sure you want to delete this item?')) return;
       try {
-        const response = await fetch(`http://localhost:8080/api/items/${itemId}`, {
+        const response = await fetch(`http://localhost:8080/api/items/${itemId}`, { // Use full URL
           method: 'DELETE',
           credentials: 'include'
         });
         if (!response.ok) throw new Error('Failed to delete item');
         showMessage('Item deleted successfully!');
-        fetchItems();
+        fetchItems(); // Refresh the list after deleting
       } catch (error) {
         showMessage(`Error deleting item: ${error.message}`);
       }
     }
 
-    // Initialize
+    // Fetch and display orders
+    async function fetchOrders(statusFilter = null) {
+      try {
+        let url = 'http://localhost:8080/api/orders';
+        if (statusFilter) {
+          url += `?status=${statusFilter}`;
+        }
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const contentType = response.headers.get('content-type');
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch orders: ${response.status} ${response.statusText}. Response: ${errorText.substring(0, 200)}`);
+        }
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          throw new Error('Expected JSON but got: ' + text.substring(0, 100) + '... (Full response not JSON)');
+        }
+
+        const orders = await response.json();
+        const ordersTableBody = document.getElementById('ordersTableBody');
+        ordersTableBody.innerHTML = '';
+
+        if (orders.length === 0) {
+          ordersTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">No orders found.</td></tr>';
+          return;
+        }
+
+        orders.forEach(order => {
+          const row = document.createElement('tr');
+          const statusColor = getStatusColor(order.status);
+          const orderDate = new Date(order.createdAt || order.orderDate || Date.now()).toLocaleDateString();
+          
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#${order.id}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.customerName || order.customer?.username || 'Unknown'}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">LKR ${parseFloat(order.totalAmount || order.total || 0).toFixed(2)}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
+                ${order.status || 'PENDING'}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${orderDate}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <select onchange="updateOrderStatus('${order.id}', this.value)" class="text-sm border border-gray-300 rounded px-2 py-1">
+                <option value="PENDING" ${order.status === 'PENDING' ? 'selected' : ''}>Pending</option>
+                <option value="COMPLETED" ${order.status === 'COMPLETED' ? 'selected' : ''}>Completed</option>
+                <option value="CANCELLED" ${order.status === 'CANCELLED' ? 'selected' : ''}>Cancelled</option>
+              </select>
+              <button onclick="viewOrderDetails('${order.id}')" class="ml-2 text-blue-600 hover:text-blue-800">View</button>
+            </td>
+          `;
+          ordersTableBody.appendChild(row);
+        });
+      } catch (error) {
+        showMessage(`Error fetching orders: ${error.message}`);
+        console.error("Detailed error fetching orders:", error);
+      }
+    }
+
+    // Helper function to get status color classes
+    function getStatusColor(status) {
+      switch (status?.toUpperCase()) {
+        case 'COMPLETED':
+          return 'bg-green-100 text-green-800';
+        case 'CANCELLED':
+          return 'bg-red-100 text-red-800';
+        case 'PENDING':
+        default:
+          return 'bg-yellow-100 text-yellow-800';
+      }
+    }
+
+    // Update order status
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/orders/${orderId}/status`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: newStatus }),
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to update order status');
+        }
+
+        showMessage(`Order #${orderId} status updated to ${newStatus}`);
+        fetchOrders(); // Refresh the orders list
+      } catch (error) {
+        showMessage(`Error updating order status: ${error.message}`);
+        fetchOrders(); // Refresh to revert the select change
+      }
+    }
+
+    // View order details (placeholder - can be expanded)
+    function viewOrderDetails(orderId) {
+      showMessage(`Order details for #${orderId} - Feature coming soon!`);
+    }
+
+    // Order filter event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = [
+        { id: 'filter-all-orders', status: null },
+        { id: 'filter-pending-orders', status: 'PENDING' },
+        { id: 'filter-completed-orders', status: 'COMPLETED' },
+        { id: 'filter-cancelled-orders', status: 'CANCELLED' }
+      ];
+
+      filterButtons.forEach(({ id, status }) => {
+        const button = document.getElementById(id);
+        if (button) {
+          button.addEventListener('click', () => fetchOrders(status));
+        }
+      });
+    });
+
+    // Fetch and display users
+    async function fetchUsers() {
+      try {
+        const response = await fetch('http://localhost:8080/api/users', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const contentType = response.headers.get('content-type');
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}. Response: ${errorText.substring(0, 200)}`);
+        }
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          throw new Error('Expected JSON but got: ' + text.substring(0, 100) + '... (Full response not JSON)');
+        }
+
+        const users = await response.json();
+        const usersTableBody = document.getElementById('usersTableBody');
+        usersTableBody.innerHTML = '';
+
+        if (users.length === 0) {
+          usersTableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">No users found.</td></tr>';
+          return;
+        }
+
+        users.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.id}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.username}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.email}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
+                ${user.role || 'USER'}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <button onclick="editUser('${user.id}')" class="text-blue-600 hover:text-blue-800 mr-2">Edit</button>
+              <button onclick="deleteUser('${user.id}')" class="text-red-600 hover:text-red-800">Delete</button>
+            </td>
+          `;
+          usersTableBody.appendChild(row);
+        });
+      } catch (error) {
+        showMessage(`Error fetching users: ${error.message}`);
+        console.error("Detailed error fetching users:", error);
+      }
+    }
+
+    // Add new user
+    const addUserForm = document.getElementById('addUserForm');
+    if (addUserForm) {
+      addUserForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(addUserForm);
+        const userData = {
+          username: formData.get('username'),
+          email: formData.get('email'),
+          password: formData.get('password'),
+          role: formData.get('role')
+        };
+
+        try {
+          const response = await fetch('http://localhost:8080/api/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+            credentials: 'include'
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Failed to add user');
+          }
+
+          const data = await response.json();
+          showMessage(`User "${data.username}" added successfully!`);
+          addUserForm.reset();
+          fetchUsers(); // Refresh the users list
+        } catch (error) {
+          showMessage(`Error adding user: ${error.message}`);
+        }
+      });
+    }
+
+    // Edit user (placeholder - can be expanded with a modal)
+    function editUser(userId) {
+      showMessage(`Edit user functionality for user ID: ${userId} - Feature coming soon!`);
+    }
+
+    // Delete user
+    async function deleteUser(userId) {
+      if (!confirm('Are you sure you want to delete this user?')) return;
+      
+      try {
+        const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+          method: 'DELETE',
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to delete user');
+        }
+        
+        showMessage('User deleted successfully!');
+        fetchUsers(); // Refresh the users list
+      } catch (error) {
+        showMessage(`Error deleting user: ${error.message}`);
+      }
+    }
+
+    // Initialize: Show 'Manage Items' section and fetch items on page load
     document.addEventListener('DOMContentLoaded', () => {
       showSection('manage-items');
-      fetchItems();
+      // fetchItems() is already called by showSection('manage-items')
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const bannerImageUpload = document.getElementById('bannerImageUpload');
+    const uploadAndResizeBtn = document.getElementById('uploadAndResizeBtn');
+    const uploadStatus = document.getElementById('uploadStatus');
+
+    // Client-side resize parameters
+    const TARGET_WIDTH = 1200;
+    const TARGET_HEIGHT = 400;
+
+    uploadAndResizeBtn.addEventListener('click', () => {
+        const file = bannerImageUpload.files[0];
+        if (!file) {
+            uploadStatus.textContent = 'Please select an image file.';
+            uploadStatus.className = 'text-red-600';
+            return;
+        }
+
+        // Use FileReader and Canvas to resize image client-side
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                // Create canvas for resizing
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = TARGET_WIDTH;
+                canvas.height = TARGET_HEIGHT;
+
+                // Calculate cropping for center crop to maintain aspect ratio
+                const imgAspect = img.width / img.height;
+                const targetAspect = TARGET_WIDTH / TARGET_HEIGHT;
+
+                let sx, sy, sWidth, sHeight;
+
+                if (imgAspect > targetAspect) {
+                    // Image wider than target aspect ratio
+                    sHeight = img.height;
+                    sWidth = sHeight * targetAspect;
+                    sx = (img.width - sWidth) / 2;
+                    sy = 0;
+                } else {
+                    // Image taller than target aspect ratio
+                    sWidth = img.width;
+                    sHeight = sWidth / targetAspect;
+                    sx = 0;
+                    sy = (img.height - sHeight) / 2;
+                }
+
+                ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+
+                // Convert canvas to blob and upload
+                canvas.toBlob(async (blob) => {
+                    if (!blob) {
+                        uploadStatus.textContent = 'Failed to resize image.';
+                        uploadStatus.className = 'text-red-600';
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('bannerImage', blob, file.name);
+
+                    try {
+                        uploadStatus.textContent = 'Uploading...';
+                        uploadStatus.className = 'text-blue-600';
+
+                        const response = await fetch('/api/upload-banner', {
+                            method: 'POST',
+                            body: formData,
+                            credentials: 'include'
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || 'Upload failed');
+                        }
+
+                        const data = await response.json();
+                        uploadStatus.textContent = 'Upload successful! Image URL: ' + data.imageUrl;
+                        uploadStatus.className = 'text-green-600';
+
+                        // Optionally, update carousel or banner preview here
+                    } catch (error) {
+                        uploadStatus.textContent = 'Upload failed: ' + error.message;
+                        uploadStatus.className = 'text-red-600';
+                    }
+                }, 'image/jpeg', 0.9);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
   </script>
 </body>
 </html>
