@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Category - Pahana Edu Bookshop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 font-sans">
+
+<header class="bg-nav text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="/" class="text-2xl font-bold">Pahana Edu Bookshop</a>
+        <nav>
+            <a href="/" class="hover:underline mr-4">Home</a>
+            <a href="/category.html?name=latest-arrivals" class="hover:underline mr-4">Latest Arrivals</a>
+            <a href="/category.html?name=childrens-books" class="hover:underline mr-4">Children's Books</a>
+            <a href="/category.html?name=fiction" class="hover:underline mr-4">Fiction</a>
+            <a href="/category.html?name=international-books" class="hover:underline mr-4">International Books</a>
+            <a href="/category.html?name=e-books" class="hover:underline">E-Books</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container mx-auto p-6">
+    <h1 id="category-title" class="text-3xl font-bold mb-6">Category</h1>
+    <div id="items-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Items will be loaded here -->
+    </div>
+</main>
+
+<script>
+    // Utility to get query parameters
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Map category keys to display names (optional)
+    const categoryDisplayNames = {
+        'latest-arrivals': 'Latest Arrivals',
+        'childrens-books': "Children's Books",
+        'fiction': 'Fiction',
+        'international-books': 'International Books',
+        'e-books': 'E-Books'
+    };
+
+    // Example: Simulated items data (replace with your real API or data source)
+    const allItems = [
+        { id: 1, name: 'The Great Adventure', category: 'fiction', price: 1200, imageUrl: 'https://placehold.co/200x300?text=The+Great+Adventure' },
+        { id: 2, name: 'Kids Fun Book', category: 'childrens-books', price: 800, imageUrl: 'https://placehold.co/200x300?text=Kids+Fun+Book' },
+        { id: 3, name: 'International Cooking', category: 'international-books', price: 1500, imageUrl: 'https://placehold.co/200x300?text=International+Cooking' },
+        { id: 4, name: 'E-Book on Coding', category: 'e-books', price: 500, imageUrl: 'https://placehold.co/200x300?text=E-Book+on+Coding' },
+        { id: 5, name: 'New Arrival: Mystery Novel', category: 'latest-arrivals', price: 1300, imageUrl: 'https://placehold.co/200x300?text=Mystery+Novel' },
+        // Add more items as needed
+    ];
+
+    // Main function to load and display items based on category
+    function loadCategoryItems() {
+        const category = getQueryParam('name') || 'latest-arrivals';
+        const title = categoryDisplayNames[category] || 'Category';
+
+        document.getElementById('category-title').textContent = title;
+
+        // Filter items by category
+        const filteredItems = allItems.filter(item => item.category === category);
+
+        const container = document.getElementById('items-container');
+        container.innerHTML = '';
+
+        if (filteredItems.length === 0) {
+            container.innerHTML = '<p class="text-gray-600 col-span-full">No items found in this category.</p>';
+            return;
+        }
+
+        filteredItems.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded shadow p-4 flex flex-col';
+
+            card.innerHTML = `
+                <img src="${item.imageUrl}" alt="${item.name}" class="mb-4 rounded h-48 object-cover" />
+                <h2 class="font-semibold text-lg mb-2">${item.name}</h2>
+                <p class="text-primary font-bold mb-2">LKR ${item.price.toFixed(2)}</p>
+                <button class="bg-primary text-white py-2 rounded hover:bg-primary-light transition-colors add-to-cart-btn">Add to Cart</button>
+            `;
+
+            container.appendChild(card);
+        });
+
+        // Add event listeners to "Add to Cart" buttons if you have cart functionality
+        // For example:
+        // document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        //     btn.addEventListener('click', () => {
+        //         alert('Add to cart clicked for ' + btn.parentElement.querySelector('h2').textContent);
+        //     });
+        // });
+    }
+
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', loadCategoryItems);
+</script>
+
+</body>
+</html>
