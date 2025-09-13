@@ -20,7 +20,7 @@
                 <a href="#view-orders" class="block py-2 px-4 rounded hover:bg-gray-700 tab-link">View Orders</a>
                 <a href="#user-management" class="block py-2 px-4 rounded hover:bg-gray-700 tab-link">User  Management</a>
                 <a href="#banner-management" class="block py-2 px-4 rounded hover:bg-gray-700 tab-link">Banner Management</a>
-                <a href="/home" class="block py-2 px-4 rounded hover:bg-gray-700">Back to Home</a>
+                <a href="#" onclick="backToHome()" class="block py-2 px-4 rounded hover:bg-gray-700 mt-4">Back to Home</a>
                 <a href="/logout" class="block py-2 px-4 rounded hover:bg-gray-700">Logout</a>
             </nav>
             <div class="mt-6">
@@ -186,6 +186,11 @@
     </div>
 
     <script>
+        // Global function for "Back to Home"
+        function backToHome() {
+            window.location.href = '/index.html'; // or '/' depending on your server setup
+        }
+
         // Tab Navigation
         const tabLinks = document.querySelectorAll('.tab-link');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -261,6 +266,12 @@
                 `;
                 tableBody.appendChild(row);
             });
+
+            //Bck to home function
+            function backToHome() {
+                window.location.href = '/index.html'; // or '/'
+                }
+
 
             // Attach delete event listeners
             document.querySelectorAll('.delete-item').forEach(btn => {

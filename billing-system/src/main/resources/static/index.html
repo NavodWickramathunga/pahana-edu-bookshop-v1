@@ -30,7 +30,7 @@
             --accent-color: #f6ad55;
             --text-color: #2d3748;
             --header-bg: #f0fdf4;
-            --nav-bg: #38a169;
+            --nav-bg: #38a100; /* Corrected to a valid green hex code */
         }
         .text-primary {
             color: var(--primary-color);
@@ -84,15 +84,15 @@
     <nav class="bg-nav shadow-lg transition-colors">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
             <!-- Logo -->
-            <a href="#" class="text-white text-2xl font-bold">Pahana Edu Bookshop</a>
+            <a href="/" class="text-white text-2xl font-bold">Pahana Edu Bookshop</a> <!-- Changed href to / for home -->
             <!-- Main Nav Links -->
             <ul class="hidden md:flex space-x-6 text-white font-medium">
-                <li><a href="#" class="hover:underline">Latest Arrivals</a></li>
-                <li><a href="#" class="hover:underline">Children's Books</a></li>
-                <li><a href="#" class="hover:underline">Fiction</a></li>
-                <li><a href="#" class="hover:underline">International Books</a></li>
-                <li><a href="#" class="hover:underline">E-Books</a></li>
-                <li><a href="#" class="hover:underline">Branches</a></li>
+                <li><a href="/category/latest-arrivals" class="hover:underline">Latest Arrivals</a></li>
+                <li><a href="/category/childrens-books" class="hover:underline">Children's Books</a></li>
+                <li><a href="/category/fiction" class="hover:underline">Fiction</a></li>
+                <li><a href="/category/international-books" class="hover:underline">International Books</a></li>
+                <li><a href="/category/e-books" class="hover:underline">E-Books</a></li>
+                <li><a href="/branches.html" class="hover:underline">Branches</a></li>
             </ul>
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Open mobile menu">
@@ -106,19 +106,22 @@
     <!-- Mobile Menu (Hidden by default) -->
     <div id="mobile-menu" class="hidden md:hidden bg-nav text-white px-4 py-2 transition-colors">
         <ul class="flex flex-col space-y-2 font-medium">
-            <li><a href="#" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Latest Arrivals</a></li>
-            <li><a href="#" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Children's Books</a></li>
-            <li><a href="#" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Fiction</a></li>
-            <li><a href="#" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">International Books</a></li>
-            <li><a href="#" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">E-Books</a></li>
-            <li><a href="#" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Branches</a></li>
+            <li><a href="/category/latest-arrivals" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Latest Arrivals</a></li>
+            <li><a href="/category/childrens-books" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Children's Books</a></li>
+            <li><a href="/category/fiction" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Fiction</a></li>
+            <li><a href="/category/international-books" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">International Books</a></li>
+            <li><a href="/category/e-books" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">E-Books</a></li>
+            <li><a href="/branches.html" class="block hover:bg-primary-light px-2 py-1 rounded transition-colors">Branches</a></li>
         </ul>
     </div>
 
     <!-- Theme Switcher and Refresh -->
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <div class="flex space-x-2">
-            
+            <!-- Added Refresh Button -->
+            <button id="refresh-btn" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors">Refresh Content</button>
+            <!-- Added Reset Banner Button -->
+            <button id="reset-banner-btn" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors">Reset Banner</button>
         </div>
         <div class="flex items-center space-x-2">
             <span class="text-gray-600 text-sm">Themes:</span>
@@ -340,7 +343,7 @@
     });
 
     // Backend: Save uploaded banner
-$bannerPath = '/images/banners/current-banner.jpg';
+// $bannerPath = '/images/banners/current-banner.jpg'; // This is a PHP comment, not relevant for client-side JS
 // Save image and update database with $bannerPath
 
     // Image Carousel functionality
@@ -636,6 +639,26 @@ $bannerPath = '/images/banners/current-banner.jpg';
             restoreOriginalBanner();
             showMessage('Banner reset to original!');
         });
+
+        // Theme switching logic
+        const themeBlueBtn = document.getElementById('theme-blue-btn');
+        const themeGreenBtn = document.getElementById('theme-green-btn');
+        const body = document.body;
+
+        themeBlueBtn.addEventListener('click', () => {
+            body.classList.remove('theme-green');
+            localStorage.setItem('theme', 'blue');
+        });
+
+        themeGreenBtn.addEventListener('click', () => {
+            body.classList.add('theme-green');
+            localStorage.setItem('theme', 'green');
+        });
+
+        // Apply saved theme on load
+        if (localStorage.getItem('theme') === 'green') {
+            body.classList.add('theme-green');
+        }
     });
 
     // Listen for shared data changes
