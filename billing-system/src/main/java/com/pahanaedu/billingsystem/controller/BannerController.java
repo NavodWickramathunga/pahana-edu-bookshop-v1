@@ -36,8 +36,8 @@ public class BannerController {
     }
 
     // Upload and resize the banner to 1200x400, then store the latest URL
-    @PostMapping(value = "/upload-banner", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Map<String, String>> uploadBannerImage(@RequestParam("bannerImage") MultipartFile file) {
+    @PostMapping(value = "/banner", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> uploadBannerImage(@RequestParam("banner") MultipartFile file) {
         logger.info("Banner upload request received. File: {}, Size: {}", 
                    file != null ? file.getOriginalFilename() : "null", 
                    file != null ? file.getSize() : 0);
