@@ -219,10 +219,26 @@
             });
         });
 
+        // Initialize shared data storage
+        if (!window.sharedData) {
+            window.sharedData = {
+                items: [],
+                banner: null,
+                lastUpdated: null
+            };
+        }
+
         // Mock Data Storage
         let items = [];
         let orders = [];
         let users = [];
+        let bannerImageData = ''; // Store banner as base64 data URL
+
+        // Sync with shared data for index.html
+        if (window.sharedData) {
+            items = window.sharedData.items || [];
+            bannerImageData = window.sharedData.banner || '';
+        }
 
         // Add Item
         document.getElementById('add-item-form').addEventListener('submit', (e) => {
@@ -233,9 +249,18 @@
                 price: parseFloat(document.getElementById('item-price').value),
                 stock: parseInt(document.getElementById('item-stock').value),
                 author: document.getElementById('item-author').value,
-                image: document.getElementById('item-image').files[0] ? URL.createObjectURL(document.getElementById('item-image').files[0]) : ''
+                image: document.getElementById('item-image').files[0] ? URL.createObjectURL(document.getElementById('item-image').files[0]) : '',
+                discountPrice: parseFloat(document.getElementById('item-price').value) * 0.9, // Default 10% discount
+                category: 'featured' // Default category
             };
             items.push(item);
+            
+            // Sync with shared data
+            if (window.sharedData) {
+                window.sharedData.items = items;
+                window.sharedData.lastUpdated = Date.now();
+            }
+            
             updateInventoryTable();
             updateRecentItemsTable();
             document.getElementById('add-item-form').reset();
@@ -266,6 +291,13 @@
                 btn.addEventListener('click', () => {
                     const id = parseInt(btn.getAttribute('data-id'));
                     items = items.filter(item => item.id !== id);
+                    
+                    // Sync with shared data
+                    if (window.sharedData) {
+                        window.sharedData.items = items;
+                        window.sharedData.lastUpdated = Date.now();
+                    }
+                    
                     updateInventoryTable();
                     updateRecentItemsTable();
                     showModal('Item deleted successfully!');
@@ -334,32 +366,110 @@
             });
         }
 
-        // Banner Upload
+        // Banner Upload - Fixed to use client-side processing only
         document.getElementById('banner-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const bannerImage = document.getElementById('banner-image').files[0];
-            if (bannerImage) {
-                const img = new Image();
-                img.src = URL.createObjectURL(bannerImage);
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 1200;
-                    canvas.height = 400;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, 1200, 400);
-                    document.getElementById('current-banner').src = canvas.toDataURL();
-                    showModal('Banner uploaded successfully!');
-                };
+            if (!bannerImage) {
+                showModal('Please select a banner image first.');
+                return;
             }
+
+            // Validate image type
+            if (!bannerImage.type.startsWith('image/')) {
+                showModal('Please select a valid image file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    try {
+                        // Create canvas for resizing
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 1200;
+                        canvas.height = 400;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Clear canvas
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Draw resized image (center and crop if necessary)
+                        const aspectRatio = img.width / img.height;
+                        const canvasAspectRatio = canvas.width / canvas.height;
+                        
+                        let drawWidth, drawHeight, offsetX = 0, offsetY = 0;
+                        
+                        if (aspectRatio > canvasAspectRatio) {
+                            // Image is wider, fit height and crop width
+                            drawHeight = canvas.height;
+                            drawWidth = canvas.height * aspectRatio;
+                            offsetX = (canvas.width - drawWidth) / 2;
+                        } else {
+                            // Image is taller, fit width and crop height
+                            drawWidth = canvas.width;
+                            drawHeight = canvas.width / aspectRatio;
+                            offsetY = (canvas.height - drawHeight) / 2;
+                        }
+                        
+                        // Draw the image
+                        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight, 0, 0, canvas.width, canvas.height);
+                        
+                        // Convert to data URL
+                        const resizedImageData = canvas.toDataURL('image/jpeg', 0.8); // 80% quality
+                        
+                        // Update the banner display
+                        document.getElementById('current-banner').src = resizedImageData;
+                        
+                        // Store in local variable
+                        bannerImageData = resizedImageData;
+                        
+                        // Sync with shared data for index.html
+                        if (window.sharedData) {
+                            window.sharedData.banner = resizedImageData;
+                            window.sharedData.lastUpdated = Date.now();
+                        }
+                        
+                        // Reset form
+                        document.getElementById('banner-form').reset();
+                        
+                        showModal('Banner uploaded and resized successfully!');
+                        
+                    } catch (error) {
+                        console.error('Error processing banner image:', error);
+                        showModal('Error processing banner image: ' + error.message);
+                    }
+                };
+                img.onerror = function() {
+                    showModal('Error loading the image. Please select a valid image file.');
+                };
+                img.src = event.target.result;
+            };
+            reader.onerror = function() {
+                showModal('Error reading the image file.');
+            };
+            reader.readAsDataURL(bannerImage);
         });
 
         // Modal
         function showModal(message) {
             document.getElementById('modal-message').textContent = message;
             document.getElementById('modal').classList.remove('hidden');
-            document.getElementById('modal-close').addEventListener('click', () => {
-                document.getElementById('modal').classList.add('hidden');
-            });
+            
+            // Add event listener for close button (in case it's not already added)
+            const closeBtn = document.getElementById('modal-close');
+            if (closeBtn && !closeBtn.hasEventListener) {
+                closeBtn.addEventListener('click', () => {
+                    document.getElementById('modal').classList.add('hidden');
+                });
+                closeBtn.hasEventListener = true; // Prevent multiple listeners
+            }
+        }
+
+        // Initialize banner display
+        if (bannerImageData) {
+            document.getElementById('current-banner').src = bannerImageData;
         }
 
         // Initialize

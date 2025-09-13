@@ -32,7 +32,10 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<List<Item>> getAllItems() {
-        return ResponseEntity.ok(itemService.getAllItems());
+        logger.info("Getting all items");
+        List<Item> items = itemService.getAllItems();
+        logger.info("Found {} items", items.size());
+        return ResponseEntity.ok(items);
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
@@ -43,6 +46,9 @@ public class ItemController {
             @RequestParam("author") String author,
             @RequestParam(value = "image", required = false) MultipartFile imageFile
     ) {
+        logger.info("Adding new item: name={}, price={}, stock={}, author={}, hasImage={}", 
+                   name, price, stock, author, imageFile != null && !imageFile.isEmpty());
+        
         try {
             Item item = new Item();
             item.setName(name);
@@ -51,21 +57,34 @@ public class ItemController {
             item.setAuthor(author);
 
             if (imageFile != null && !imageFile.isEmpty()) {
+                logger.info("Processing image file: {} ({} bytes)", imageFile.getOriginalFilename(), imageFile.getSize());
                 String imageUrl = itemService.saveImageAndGetUrl(imageFile);
                 item.setImageUrl(imageUrl);
+                logger.info("Image saved with URL: {}", imageUrl);
             }
 
             Item savedItem = itemService.saveItem(item);
+            logger.info("Item saved successfully with ID: {}", savedItem.getId());
             return ResponseEntity.ok(savedItem);
         } catch (IOException e) {
             logger.error("Error saving item image", e);
+            return ResponseEntity.status(500).build();
+        } catch (Exception e) {
+            logger.error("Unexpected error adding item", e);
             return ResponseEntity.status(500).build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable String id) {
-        itemService.deleteItem(id);
-        return ResponseEntity.noContent().build();
+        logger.info("Deleting item with ID: {}", id);
+        try {
+            itemService.deleteItem(id);
+            logger.info("Item deleted successfully");
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            logger.error("Error deleting item with ID: {}", id, e);
+            return ResponseEntity.status(500).build();
+        }
     }
 }
